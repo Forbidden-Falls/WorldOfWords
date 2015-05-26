@@ -1,0 +1,18 @@
+﻿<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li>@Html.ActionLink("Полета", "Index", "Home")</li>
+            <li>@Html.ActionLink("Магазин", "Index", "Store")</li>
+            <li>@Html.ActionLink("Класиране", "Rating", "Home")</li>
+            <li>@Html.ActionLink("Правила", "Rules", "Home")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Начало", "Index", "Home")</li>
+            <li>@Html.ActionLink("Правила", "Rules", "Home")</li>
+        }
+    </ul>
+        @Html.Partial("_LoginPartial")
+ </div>
+

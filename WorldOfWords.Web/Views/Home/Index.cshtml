@@ -1,0 +1,139 @@
+﻿@using System
+@using System.Data.Odbc
+﻿@model WorldOfWords.Web.ViewsModels.HomeViewModel
+
+@{
+    ViewBag.Title = "Home";
+    var odd = true;
+}
+
+@if (Model != null)
+{
+    if (User.Identity.IsAuthenticated)
+    {
+        <div class="row">
+
+            <div>
+                <h1>@(User.Identity.Name)'s Word World</h1>
+            </div>
+            <aside class="col-md-2">
+                <strong>Твоят профил:</strong>
+                <ul>
+                    <li>@(Model.Balance) голдъни</li>
+                    <li>@(Model.EarnedPoints) точки</li>
+                </ul>
+
+                <strong>Твоите Думи:</strong>
+                <fieldset>
+                    @foreach (var group in Model.WordsUsers)
+                    {
+                        <legend><a href="../store"><strong>@group.Key</strong></a></legend>
+                        foreach (var word in group)
+                        {
+                            <table style="width: 98%">
+                                <tr>
+                                    <td align="left">@word.Word.Content</td>
+                                    <td align="right">@word.WordCount</td>
+                                </tr>
+                            </table>
+                        }
+                    }
+                </fieldset>
+            </aside>
+            <div class="col-md-10">
+                @if (Model.BoardsUsers != null && Model.BoardsUsers.Count > 0)
+                {
+                    <h5><strong>Активни дъски</strong></h5>
+                    <table class="table">
+                        <tr class="warning">
+                            <th>Име</th>
+                            <th>Площ</th>
+                            <th>Изтича на</th>
+                            <th>Оставащи минути</th>
+                            <th>Точки</th>
+                        </tr>
+
+
+                        @foreach (var board in Model.BoardsUsers)
+                        {
+                            TimeSpan expired = board.Board.ExpirationDate - DateTime.Now;
+
+                            <tr class="@(odd ? "info" : "success")">
+                                <td>
+                                    <a href="@("../board/" + board.Board.Name.Text)"><strong>@(board.Board.Name.Text)</strong></a>
+                                </td>
+                                <td>
+                                    Размер: @board.Board.Size x @board.Board.Size
+                                </td>
+                                <td>
+                                    @board.Board.ExpirationDate.ToString("HH:MM dd-MMM-yy")г.
+                                </td>
+                                <td>
+                                    <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
+                                </td>
+                                <td>
+                                    @board.UserPoints
+                                </td>
+                            </tr>
+                            odd = !odd;
+                        }
+
+                    </table>
+                }
+                else
+                {
+                    <strong>Нямате активни дъски</strong>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <h2>Welcome, Stranger!</h2>
+        <div>
+            <h3>Все още нямаш профил</h3>
+            Регистрирай се и ще имаш възможност да се съревноваваш веднага <strong>безплатно</strong>.
+        </div>
+    }
+    <div class="row">
+        @if (Model.AllBoards != null && Model.AllBoards.Count > 0)
+        {
+            odd = true;
+            <h5><strong>Всички дъски</strong></h5>
+            <table class="table">
+                <tr class="warning">
+                    <th>Име</th>
+                    <th>Площ</th>
+                    <th>Изтича на</th>
+                    <th>Оставащи минути</th>
+                </tr>
+
+                @foreach (var board in Model.AllBoards)
+                {
+                    TimeSpan expired = board.ExpirationDate - DateTime.Now;
+
+                    <tr class="@(odd ? "info" : "success")">
+                        <td>
+                            <a href="@("../board/" + board.Name.Text)"><strong>@(board.Name.Text)</strong></a>
+                        </td>
+                        <td>
+                            Размер: @board.Size x @board.Size
+                        </td>
+                        <td>
+                            @board.ExpirationDate.ToString("HH:MM dd-MMM-yy")г.
+                        </td>
+                        <td>
+                             <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
+                        </td>
+                    </tr>
+
+                    odd = !odd;
+                }
+            </table>
+        }
+        else
+        {
+            <strong>Няма дъски</strong>
+        }
+    </div>
+}

@@ -1,0 +1,32 @@
+﻿<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Ajax.BeginForm("Store", "Store", new AjaxOptions()
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "words-section"
+        }, new { @id = "search-form" }))
+{
+    <p>
+        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @id = "search-box" })
+    </p>
+}
+<div id="words-section">
+
+</div>
+<div id="shop-cart">
+
+</div>
+<script>
+    loadShop().success(function(data) {
+        $("#words-section").html(data);
+    });
+
+    $("#search-box").keyup(function (data) {
+        $("#search-form").submit();
+    });
+
+    var shopList = [];
+</script>
