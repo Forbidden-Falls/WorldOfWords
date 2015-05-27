@@ -24,6 +24,6 @@
         // Filling percents for each bonus level
         public const int FirstBonusLevel = 60;
         public const int SecondBonusLevel = 70;
-        public const int ThirdBonusLevel = 85;
+        public const int ThirdBonusLevel = 85; 
     }
 }
