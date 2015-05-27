@@ -13,6 +13,8 @@
         public ActionResult Index()
         {
             var homeInfo = new HomeViewModel();
+            this.Session["boardName"] = null;
+
 
             //take all boards
             var boardsDb = this.Data.Boards
@@ -28,7 +30,8 @@
                     {
                         Name = board.Name,
                         ExpirationDate = board.ExpirationDate,
-                        Size = board.Size
+                        Size = board.Size,
+                        Content = board.Content
                     });
                 }
             }

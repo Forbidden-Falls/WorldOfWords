@@ -212,8 +212,9 @@ app.boardHub = function (board) {
         hub.server.joinBoard(app.board.name);
     });
 
-    hub.client.loadBoard = function (content) {
+    hub.client.loadBoard = function (content, fillingPercents) {
         board.loadBoard(content);
+        $('#filling-percent').text(fillingPercents + '%');
     };
 
     function updatePage(result) {
@@ -239,7 +240,7 @@ app.boardHub = function (board) {
     };
 }(app.board);
 
-//Module shearch 
+//Module search 
 app.search = function () {
     var $words = $(".word");
 
@@ -282,7 +283,8 @@ app.search = function () {
         $words.each(function () {
             var $word = $(this);
             var word = getWordText($word);
-            toggleVisibility($word, word.indexOf(letters) >= 0);
+            var pattern = letters.replace(/\*/g, '.');
+            toggleVisibility($word, word.match(new RegExp(pattern)) != null);
         });
     }
 

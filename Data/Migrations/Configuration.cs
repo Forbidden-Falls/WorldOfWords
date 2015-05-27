@@ -169,6 +169,10 @@
                 "ягода",
                 "щайга",
                 "шайба",
+                "ухо",
+                "пиле",
+                "драка",
+                "акула",
             };
 
             var language = context.Languages.FirstOrDefault(l => l.LanguageCode == "bg");

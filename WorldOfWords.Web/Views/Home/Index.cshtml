@@ -1,5 +1,6 @@
 ﻿@using System
 @using System.Data.Odbc
+@using WorldOfWords.Web.Common
 ﻿@model WorldOfWords.Web.ViewsModels.HomeViewModel
 
 @{
@@ -12,10 +13,6 @@
     if (User.Identity.IsAuthenticated)
     {
         <div class="row">
-
-            <div>
-                <h1>@(User.Identity.Name)'s Word World</h1>
-            </div>
             <aside class="col-md-2">
                 <strong>Твоят профил:</strong>
                 <ul>
@@ -50,6 +47,7 @@
                             <th>Площ</th>
                             <th>Изтича на</th>
                             <th>Оставащи минути</th>
+                            <th>Запълнено</th>
                             <th>Точки</th>
                         </tr>
 
@@ -70,6 +68,9 @@
                                 </td>
                                 <td>
                                     <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
+                                </td>
+                                <td>
+                                    <strong>@(string.Format("{0:f0}%", Assessor.GetPercentOfFilling(board.Board.Content)))</strong>
                                 </td>
                                 <td>
                                     @board.UserPoints
@@ -93,7 +94,11 @@
         <div>
             <h3>Все още нямаш профил</h3>
             Регистрирай се и ще имаш възможност да се съревноваваш веднага <strong>безплатно</strong>.
+            <div>
+               @Html.ActionLink("Правила на играта", "Rules", "Home")
+            </div>
         </div>
+
     }
     <div class="row">
         @if (Model.AllBoards != null && Model.AllBoards.Count > 0)
@@ -106,6 +111,7 @@
                     <th>Площ</th>
                     <th>Изтича на</th>
                     <th>Оставащи минути</th>
+                    <th>Запълнено</th>
                 </tr>
 
                 @foreach (var board in Model.AllBoards)
@@ -123,7 +129,10 @@
                             @board.ExpirationDate.ToString("HH:MM dd-MMM-yy")г.
                         </td>
                         <td>
-                             <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
+                            <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
+                        </td>
+                        <td>
+                            <strong>@(string.Format("{0:f0}%", Assessor.GetPercentOfFilling(board.Content)))</strong>
                         </td>
                     </tr>
 

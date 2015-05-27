@@ -27,6 +27,8 @@
                 return this.RedirectToAction("Index", "Home");
             }
 
+            this.Session["boardName"] = board.Name.Text;
+
             if (board.Content == "")
             {
                 board.Content = new String(' ', board.Size * board.Size);
@@ -46,18 +48,7 @@
                 .ToList();
 
             var boardUser = board.BoardsUsers.FirstOrDefault(bu => bu.UserId == userId);
-            if (boardUser == null)
-            {
-                board.BoardsUsers.Add(new BoardsUsers
-                {
-                    BoardId = board.Id,
-                    UserId = userId,
-                });
-
-                this.Data.SaveChanges();
-            } 
-
-            var userPointsFromBoard = board.BoardsUsers.First().UserPoints;
+            var userPointsFromBoard = boardUser == null ? 0 : boardUser.UserPoints;
 
             var showBoardModel = new ShowBoardModel
             {

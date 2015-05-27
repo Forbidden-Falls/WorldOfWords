@@ -46,5 +46,33 @@
 
             return wordPoints;
         }
+
+        public static int GetPercentOfFilling(string content)
+        {
+            var lettersCount = content.Count(letter => letter != ' ');
+            var percent = 100 * lettersCount / content.Length;
+            return percent;
+        }
+
+        public static int GetBonusCoefficientByBoard(string boardContent)
+        {
+            var fillingPercents = GetPercentOfFilling(boardContent);
+            var bonusCoeficient = 1;
+
+            if (Config.FirstBonusLevel < fillingPercents && fillingPercents <= Config.SecondBonusLevel)
+            {
+                return Config.FirstBonusLevelCoefficient;
+            }
+            else if (Config.SecondBonusLevel < fillingPercents && fillingPercents <= Config.ThirdBonusLevel)
+            {
+                return Config.SecondBonusLevelCoefficient;
+            }
+            else if (fillingPercents > Config.ThirdBonusLevel)
+            {
+                return Config.ThirdBonusLevelCoefficient;
+            }
+
+            return bonusCoeficient;
+        }
     }
 }

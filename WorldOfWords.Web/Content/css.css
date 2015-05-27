@@ -61,7 +61,7 @@ body > div.container.body-content > div > aside > fieldset {
 
 .words-container {
     overflow-y: scroll;
-    height: 35rem;
+    height: 32rem;
 }
 
 .word {
@@ -70,12 +70,12 @@ body > div.container.body-content > div > aside > fieldset {
 }
 
     .word span, .board span {
-        width: 4rem;
-        height: 4rem;
+        width: 3.6rem;
+        height: 3.6rem;
         display: table-cell;
         text-align: center;
         vertical-align: middle;
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .word span {
@@ -126,5 +126,9 @@ body > div.container.body-content > div > aside > fieldset > table > tbody > tr 
 
 .font-size-15 {
     font-size: 1.5rem;
+}
+
+#message {
+    font-size: 1.8rem;
 }
 

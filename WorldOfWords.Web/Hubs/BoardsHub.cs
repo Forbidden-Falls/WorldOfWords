@@ -2,12 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Drawing;
     using System.Linq;
-    using System.Reflection;
-    using Controllers;
-    using Data.Contracts;
+    using Common;
     using Microsoft.AspNet.Identity;
     using Models;
     using Newtonsoft.Json;
@@ -47,15 +43,33 @@
                 if (board.ExpirationDate < DateTime.Now)
                 {
                     isBoardClosed = true;
-                    throw new ApplicationException("The board is closed.");
+                    throw new ApplicationException("Полето е затворено");
                 }
+
+                var boardsUsers = this.Data.BoardsUsers
+                    .FirstOrDefault(bu => (bu.UserId == userId && bu.Board.Name.Text == boardName));
+                if (boardsUsers == null)
+                {
+                    board.BoardsUsers.Add(new BoardsUsers
+                    {
+                        BoardId = board.Id,
+                        UserId = userId,
+                    });
+
+                    this.Data.SaveChanges();
+
+                    boardsUsers = this.Data.BoardsUsers
+                    .FirstOrDefault(bu => (bu.UserId == userId && bu.Board.Name.Text == boardName));
+               }
+
+                userPoits = boardsUsers.UserPoints;
 
                 var word = this.Data.WordsUsers
                     .Where(wu => wu.UserId == userId)
                     .FirstOrDefault(w => w.Word.Content == addedWord);
                 if (word == null)
                 {
-                    throw new ApplicationException("User has no such word.");
+                    throw new ApplicationException("Нямаш таква дума.");
                 }
 
                 var startPosition = this.GetStartPosition(board.Size, addedWord.Count(), catchedLetterId, isVertical,
@@ -63,7 +77,7 @@
 
                 if (startPosition < 0)
                 {
-                    throw new ApplicationException("The word is out board.");
+                    throw new ApplicationException("Думата е извън полето.");
                 }
 
                 this.AddWordInBoardContent(board, addedWord, catchedLetterId, isVertical, dropCellId, startPosition);
@@ -71,7 +85,7 @@
 
                 if (newContent == null)
                 {
-                    throw new ApplicationException("Illegal crossing of words.");
+                    throw new ApplicationException("Непозволено пресичане на думи.");
                 }
 
                 if (board.Words.All(w => w.Content != addedWord))
@@ -87,9 +101,7 @@
                         this.Data.WordsUsers.Delete(word);
                     }
 
-                    pointsOfWord = this.GetPoints(addedWord);
-                    var boardsUsers = this.Data.BoardsUsers
-                        .First(bu => (bu.UserId == userId && bu.Board.Name.Text == boardName));
+                    pointsOfWord = this.GetPoints(addedWord, board.Content);
 
                     boardsUsers.UserPoints += pointsOfWord;
                     var user = this.Data.Users.First(u => u.Id == userId);
@@ -100,7 +112,7 @@
                 }
                 else
                 {
-                    throw new ApplicationException(string.Format("The word \"{0}\" is already  embedded",
+                    throw new ApplicationException(string.Format("Думата \"{0}\" е има в полето.",
                         word.Word.Content));
                 }
             }
@@ -121,13 +133,13 @@
                    words = board.Words.Select(w => w.Content).ToList()
                });
 
-                this.Clients.Group(boardName).loadBoard(json);
+                this.Clients.Group(boardName).loadBoard(json, Assessor.GetPercentOfFilling(board.Content));
             }
 
             return new
             {
-                message = string.Format("Points of word: {0}", pointsOfWord),
-                points = userPoits
+                message = string.Format("Изкарани точки от думата: {0}", pointsOfWord),
+                points = userPoits,
             };
         }
 
@@ -194,7 +206,7 @@
             this.BoardContent = string.Join("", cells);
         }
 
-        private int GetPoints(string addedWord)
+        private int GetPoints(string addedWord, string boardContent)
         {
             const double bonusPercentagesForCrossing = 10;
 
@@ -204,9 +216,10 @@
             var additionalPoints = this.CrossLetters
                 .Select(l => this.WordAssessor.GetPointsByLetter(l))
                 .Sum();
+            var bonusCoefficient = Assessor.GetBonusCoefficientByBoard(boardContent);
 
-            points = (int) Math.Round((wordPoints * (1 + bonusPercentagesForCrossing / 100 * numberOfCrossings)), 0) + additionalPoints;
-
+            points = wordPoints 
+                + ((int)(Math.Round((wordPoints * (bonusPercentagesForCrossing / 100 * numberOfCrossings)), 0) + additionalPoints)) * bonusCoefficient;
             return points;
         }
     }

@@ -186,6 +186,7 @@
     <Compile Include="BindingModels\ShopItem.cs" />
     <Compile Include="BindingModels\UserModel.cs" />
     <Compile Include="Common\Assessor.cs" />
+    <Compile Include="Common\BoardsManager.cs" />
     <Compile Include="Common\Config.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -280,8 +281,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Boards\Show.cshtml" />
-    <Content Include="Views\Boards\_LayoutBoard.cshtml" />
-    <Content Include="Views\Boards\_ViewStart.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\Store\Store.cshtml" />
     <Content Include="Views\Store\Cart.cshtml" />
