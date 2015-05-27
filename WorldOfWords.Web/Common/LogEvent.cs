@@ -11,4 +11,3 @@ namespace WorldOfWords.Web.Common
         }
     }
 }
-}
