@@ -54,7 +54,7 @@
 
                         @foreach (var board in Model.BoardsUsers)
                         {
-                            TimeSpan expired = board.Board.ExpirationDate - DateTime.Now;
+                            TimeSpan expired = board.Board.ExpirationDate - DateTime.UtcNow;
 
                             <tr class="@(odd ? "info" : "success")">
                                 <td>
@@ -116,7 +116,7 @@
 
                 @foreach (var board in Model.AllBoards)
                 {
-                    TimeSpan expired = board.ExpirationDate - DateTime.Now;
+                    TimeSpan expired = board.ExpirationDate - DateTime.UtcNow;
 
                     <tr class="@(odd ? "info" : "success")">
                         <td>

@@ -18,7 +18,7 @@
 
         public User()
         {
-            this.RegisteredOn = DateTime.Now;
+            this.RegisteredOn = DateTime.UtcNow;
             this.wordsUsers = new HashSet<WordsUsers>();
             this.boardsUsers = new HashSet<BoardsUsers>();
             this.Balance = StartPoints;

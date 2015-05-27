@@ -27,11 +27,14 @@
             this.WordAssessor = new Assessor(Config.Language, this.Data);
             var boardManager = new BoardsManager(this.Data);
             boardManager.Execute();
-            var i = 5;
+
+            this.StoreManager = new StoreManager(this.Data, this.WordAssessor);
         }
 
         protected IWorldOfWordsData Data { get; set; }
 
         protected Assessor WordAssessor { get; set; }
+
+        protected StoreManager StoreManager { get; set; }
     }
 }

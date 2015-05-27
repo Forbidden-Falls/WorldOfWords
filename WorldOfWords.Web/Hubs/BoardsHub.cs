@@ -40,7 +40,7 @@
                     throw new ApplicationException(String.Format("Board with name {0} is not found.", boardName));
                 }
 
-                if (board.ExpirationDate < DateTime.Now)
+                if (board.ExpirationDate < DateTime.UtcNow)
                 {
                     isBoardClosed = true;
                     throw new ApplicationException("Полето е затворено");

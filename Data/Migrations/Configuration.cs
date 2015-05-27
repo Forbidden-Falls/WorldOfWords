@@ -187,7 +187,7 @@
                 context.Words.Add(wordEntity);
                 context.StoreWords.Add(new StoreWord
                 {
-                    DateAdded = DateTime.Now,
+                    DateAdded = DateTime.UtcNow,
                     Word = wordEntity,
                     Quantity = 2
                 });
