@@ -12,7 +12,7 @@
         public const int MaxSize = 10;
 
         // board life
-        public const int MinDurationInMinutes = 15;
+        public const int MinDurationInMinutes = 10;
         // 2 hours = 60 min * 2 = 120
         public const int MaxDurationInMinutes = 120;
 

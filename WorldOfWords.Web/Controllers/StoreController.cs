@@ -35,6 +35,7 @@ namespace WorldOfWords.Web.Controllers
 
             var currentUser = User.Identity.GetUserId();
             var words = this.Data.StoreWords
+                .Where(w => w.Word.Language.LanguageCode == Config.Language)
                 .Select(sw => new WordWithCount
                 {
                     Id = sw.Id,

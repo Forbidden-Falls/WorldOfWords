@@ -188,6 +188,7 @@
     <Compile Include="Common\Assessor.cs" />
     <Compile Include="Common\BoardsManager.cs" />
     <Compile Include="Common\Config.cs" />
+    <Compile Include="Common\LogEvent.cs" />
     <Compile Include="Common\StoreManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />

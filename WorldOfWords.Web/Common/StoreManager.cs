@@ -23,36 +23,39 @@ namespace WorldOfWords.Web.Common
 
         private void FillStore(int balanceInStore)
         {
-                var random = new Random();
-                while (balanceInStore < Config.MaxBalanceInStore)
+            new LogEvent("In fill store - " + balanceInStore).Raise();
+            var random = new Random();
+            while (balanceInStore < Config.MaxBalanceInStore)
+            {
+                new LogEvent("in while - " + balanceInStore + "; max is: " + Config.MaxBalanceInStore + "; check " +
+                             (balanceInStore < Config.MaxBalanceInStore));
+                var randomIndex = random.Next(0, this.Data.Words.Count());
+
+                var word = this.Data.Words
+                    .OrderBy(w => Guid.NewGuid())
+                    .Skip(randomIndex)
+                    .Take(1)
+                    .First();
+
+                var storeWord = this.Data.StoreWords.FirstOrDefault(sw => sw.WordId == word.Id);
+                if (storeWord == null)
                 {
-                    var randomIndex = random.Next(0, this.Data.Words.Count());
-
-                    var word = this.Data.Words
-                        .OrderBy(w => Guid.NewGuid())
-                        .Skip(randomIndex)
-                        .Take(1)
-                        .First();
-
-                    var storeWord = this.Data.StoreWords.FirstOrDefault(sw => sw.WordId == word.Id);
-                    if (storeWord == null)
+                    var newStoreWord = new StoreWord()
                     {
-                        var newStoreWord = new StoreWord()
-                        {
-                            DateAdded = DateTime.UtcNow,
-                            WordId = word.Id,
-                            Quantity = Config.InitialQuantityForWordInStore
-                        };
+                        DateAdded = DateTime.UtcNow,
+                        WordId = word.Id,
+                        Quantity = Config.InitialQuantityForWordInStore
+                    };
 
-                        this.Data.StoreWords.Add(newStoreWord);
-                        balanceInStore += this.WordAssessor.GetPointsByWord(word.Content) * newStoreWord.Quantity;
-                    }
-                    else
-                    {
-                        storeWord.Quantity += Config.InitialQuantityForWordInStore;
-                    }
-                    this.Data.SaveChanges();
+                    this.Data.StoreWords.Add(newStoreWord);
+                    balanceInStore += this.WordAssessor.GetPointsByWord(word.Content) * newStoreWord.Quantity;
                 }
+                else
+                {
+                    storeWord.Quantity += Config.InitialQuantityForWordInStore;
+                }
+                this.Data.SaveChanges();
+            }
         }
 
         private int TotalBalanceInStore()
