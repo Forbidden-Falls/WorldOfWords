@@ -72,7 +72,7 @@ namespace WorldOfWords.Web.Common
             var balanceInStore = TotalBalanceInStore();
             if (balanceInStore < Config.MinBalanceInStore)
             {
-                FillStore(balanceInStore);
+                //FillStore(balanceInStore);
             }
         }
     }
