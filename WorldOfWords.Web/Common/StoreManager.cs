@@ -23,12 +23,9 @@ namespace WorldOfWords.Web.Common
 
         private void FillStore(int balanceInStore)
         {
-            new LogEvent("In fill store - " + balanceInStore).Raise();
             var random = new Random();
             while (balanceInStore < Config.MaxBalanceInStore)
             {
-                new LogEvent("in while - " + balanceInStore + "; max is: " + Config.MaxBalanceInStore + "; check " +
-                             (balanceInStore < Config.MaxBalanceInStore));
                 var randomIndex = random.Next(0, this.Data.Words.Count());
 
                 var word = this.Data.Words
@@ -48,12 +45,13 @@ namespace WorldOfWords.Web.Common
                     };
 
                     this.Data.StoreWords.Add(newStoreWord);
-                    balanceInStore += this.WordAssessor.GetPointsByWord(word.Content) * newStoreWord.Quantity;
                 }
                 else
                 {
                     storeWord.Quantity += Config.InitialQuantityForWordInStore;
                 }
+
+                balanceInStore += this.WordAssessor.GetPointsByWord(word.Content) * Config.InitialQuantityForWordInStore;
                 this.Data.SaveChanges();
             }
         }
@@ -72,7 +70,7 @@ namespace WorldOfWords.Web.Common
             var balanceInStore = TotalBalanceInStore();
             if (balanceInStore < Config.MinBalanceInStore)
             {
-                //FillStore(balanceInStore);
+                FillStore(balanceInStore);
             }
         }
     }
