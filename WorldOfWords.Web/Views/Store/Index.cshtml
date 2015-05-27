@@ -3,21 +3,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Ajax.BeginForm("Store", "Store", new AjaxOptions()
+<div id="store">
+    @using (Ajax.BeginForm("Store", "Store", new AjaxOptions()
         {
             InsertionMode = InsertionMode.Replace,
             UpdateTargetId = "words-section"
         }, new { @id = "search-form" }))
-{
-    <p>
-        Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @id = "search-box" })
-    </p>
-}
-<div id="words-section">
+    {
+        <p>
+            Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @id = "search-box" })
+        </p>
+    }
+    <div id="words-section">
 
-</div>
-<div id="shop-cart">
+    </div>
+    <div id="shop-cart">
 
+    </div>
 </div>
 <script>
     loadShop().success(function(data) {

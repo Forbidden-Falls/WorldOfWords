@@ -1,4 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.UI;
 using Models;
 using WebGrease.Css.Extensions;
@@ -35,7 +37,7 @@ namespace WorldOfWords.Web.Controllers
             var words = this.Data.StoreWords
                 .Select(sw => new WordWithCount
                 {
-                    Id = sw.Word.Id,
+                    Id = sw.Id,
                     Content = sw.Word.Content,
                     Quantity = sw.Quantity,
                     QuantityUser = sw.Word.Users.FirstOrDefault(u => u.UserId == currentUser && u.WordId == sw.Id).WordCount,
@@ -91,34 +93,32 @@ namespace WorldOfWords.Web.Controllers
         [HttpPost]
         public ActionResult Cart(List<ShopItem> shopList)
         {
-            if (shopList != null)
+            if (shopList == null) return null;
+
+            if (shopList.Any(w => w.Quantity < 0))
             {
-                if (shopList.Any(w => w.Quantity < 0))
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid quantity");
-                }
-
-                if (shopList.Any(sl => this.Data.StoreWords.FirstOrDefault(w => w.Id == sl.WordId) == null))
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "This word isn't available at the moment");
-                }
-
-                var cartItems = shopList.Select(sl => new CartItem()
-                {
-                    WordId = sl.WordId,
-                    Word = this.Data.StoreWords.FirstOrDefault(w => w.Id == sl.WordId).Word.Content,
-                    Quantity = sl.Quantity
-                }).ToList();
-
-                foreach (var item in cartItems)
-                {
-                    item.Price = this.WordAssessor.GetPointsByWord(item.Word);
-                }
-
-                this.ViewBag.TotalPrice = cartItems.Sum(i => i.Price * i.Quantity);
-                return PartialView(cartItems);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid quantity");
             }
-            return null;
+
+            if (shopList.Any(sl => this.Data.StoreWords.FirstOrDefault(w => w.Id == sl.WordId) == null))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "This word isn't available at the moment");
+            }
+
+            var cartItems = shopList.Select(sl => new CartItem()
+            {
+                WordId = sl.WordId,
+                Word = this.Data.StoreWords.FirstOrDefault(w => w.Id == sl.WordId).Word.Content,
+                Quantity = sl.Quantity
+            }).ToList();
+
+            foreach (var item in cartItems)
+            {
+                item.Price = this.WordAssessor.GetPointsByWord(item.Word);
+            }
+
+            this.ViewBag.TotalPrice = cartItems.Sum(i => i.Price * i.Quantity);
+            return PartialView(cartItems);
         }
 
         public ActionResult Buy(List<ShopItem> shopList)
@@ -190,7 +190,62 @@ namespace WorldOfWords.Web.Controllers
 
             this.Data.SaveChanges();
 
+            Task.Factory.StartNew(() => FillStoreIfNeeded());
+
             return Json(new { errors, balance = userDb.Balance }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult FillStoreIfNeeded()
+        {
+            var balanceInStore = TotalBalanceInStore();
+            if (balanceInStore < Config.MinBalanceInStore)
+            {
+                var random = new Random();
+                while (balanceInStore < Config.MaxBalanceInStore)
+                {
+                    var randomIndex = random.Next(0, this.Data.Words.Count());
+
+                    var word = this.Data.Words
+                        .OrderBy(w => Guid.NewGuid())
+                        .Skip(randomIndex)
+                        .Take(1)
+                        .First();
+
+                    var storeWord = this.Data.StoreWords.FirstOrDefault(sw => sw.WordId == word.Id);
+                    if (storeWord == null)
+                    {
+                        var newStoreWord = new StoreWord()
+                        {
+                            DateAdded = DateTime.Now,
+                            WordId = word.Id,
+                            Quantity = Config.InitialQuantityForWordInStore
+                        };
+
+                        this.Data.StoreWords.Add(newStoreWord);
+                        balanceInStore += this.WordAssessor.GetPointsByWord(word.Content)*newStoreWord.Quantity;
+                    }
+                    else
+                    {
+                        storeWord.Quantity += Config.InitialQuantityForWordInStore;
+                    }
+                    this.Data.SaveChanges();
+                }
+
+                return Json(new { success = 1 });
+            }
+            else
+            {
+                return Json(new { success = 0, errors = "Store doesn't have to be filled" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private int TotalBalanceInStore()
+        {
+            var words = this.Data.StoreWords.Select(w => new {w.Word.Content, w.Quantity}).ToList();
+            var totalBalanceInStore = 0;
+            words.ForEach(w => totalBalanceInStore += this.WordAssessor.GetPointsByWord(w.Content)*w.Quantity);
+
+            return totalBalanceInStore;
         }
     }
 }

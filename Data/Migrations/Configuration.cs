@@ -182,7 +182,6 @@
                 var wordEntity = new Word
                 {
                     Content = word,
-                    DateAdded = DateTime.Now,
                     Language = language
                 };
                 context.Words.Add(wordEntity);

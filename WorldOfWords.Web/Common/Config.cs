@@ -24,6 +24,12 @@
         // Filling percents for each bonus level
         public const int FirstBonusLevel = 60;
         public const int SecondBonusLevel = 70;
-        public const int ThirdBonusLevel = 85; 
+        public const int ThirdBonusLevel = 85;
+
+        //Store fill configuration
+        public const int MinBalanceInStore = 200;
+        public const int MaxBalanceInStore = 400;
+        public const int InitialQuantityForWordInStore = 2;
+
     }
 }

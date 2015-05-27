@@ -58,7 +58,7 @@
             {
                 Name = boardName,
                 Size = randomSize,
-                ExpirationDate = DateTime.UtcNow.AddMinutes(randomDuration),
+                ExpirationDate = DateTime.Now.AddMinutes(randomDuration),
                 Content = new string(' ', randomSize * randomSize)
             };
 
@@ -68,7 +68,7 @@
         private void AddUsersPointsFromClosedBoards()
         {
             var users = this.Data.BoardsUsers
-                .Where(bu => bu.Board.ExpirationDate < DateTime.UtcNow)
+                .Where(bu => bu.Board.ExpirationDate < DateTime.Now)
                 .GroupBy(bu => bu.UserId)
                 .Select(g => new UserModel
                 {
@@ -90,7 +90,7 @@
         private void DeleteClosedBoards()
         {
             var boardsUsers = this.Data.BoardsUsers
-                .Where(bu => bu.Board.ExpirationDate < DateTime.UtcNow);
+                .Where(bu => bu.Board.ExpirationDate < DateTime.Now);
 
             foreach (var bu in boardsUsers)
             {
@@ -98,7 +98,7 @@
             }
 
             var boardsForDeleting = this.Data.Boards
-                .Where(b => b.ExpirationDate < DateTime.UtcNow);
+                .Where(b => b.ExpirationDate < DateTime.Now);
 
             foreach (var board in boardsForDeleting)
             {
