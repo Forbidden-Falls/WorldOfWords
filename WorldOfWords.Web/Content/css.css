@@ -1,0 +1,134 @@
+div, span {
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    list-style: none;
+}
+
+/*Home Boards containers*/
+
+body > div.container.body-content > div > div > ul {
+    border-bottom: 2px solid gainsboro;
+}
+
+body > div.container.body-content > div.row > div > div > ul > li {
+    display: inline-block;
+}
+
+body > div.container.body-content > div > div > ul > li {
+    display: inline-block;
+}
+
+body > div.container.body-content > div.row > aside {
+    background-color: #5c2040;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 10px;
+}
+
+/*Words Inventory input Home/Index*/
+body > div.container.body-content > div > aside > fieldset > legend {
+    color: gainsboro;
+    font-size: 15px;
+    margin-bottom: 1px;
+}
+
+body > div.container.body-content > div > aside > fieldset > table > tbody > tr > td {
+    padding: 0 10px;
+}
+
+
+
+body > div.container.body-content > div > aside > fieldset > p {
+    color: gainsboro;
+    font-size: 10px;
+    margin-bottom: 1px;
+}
+
+body > div.container.body-content > div > aside > fieldset > a {
+    color: gainsboro;
+    font-size: 10px;
+    margin-bottom: 1px;
+}
+
+body > div.container.body-content > div > aside > fieldset {
+    height: 200px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
+
+.words-container {
+    overflow-y: scroll;
+    height: 32rem;
+}
+
+.word {
+    display: inline-block;
+    border: solid #000 1px;
+}
+
+    .word span, .board span {
+        width: 3.6rem;
+        height: 3.6rem;
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1.8rem;
+    }
+
+    .word span {
+        border: solid #fff 1px;
+    }
+
+.vertical span {
+    display: block;
+}
+
+.board {
+    /*width: 31rem;*/
+    /*height: 100px;*/
+    display: inline-block;
+}
+
+    .board, .board span {
+        border: solid #000 1px;
+    }
+
+body > div.container.body-content > div > aside > fieldset > table > tbody > tr {
+    border: none;
+}
+
+.board, .board span {
+    border: solid #000 1px;
+}
+
+#words-section td input[type=number].shoplist {
+    width: 40px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.margin-top {
+    margin-top: 2rem;
+}
+
+.col-md-8 div {
+    margin: 3px;
+}
+
+.font-size-15 {
+    font-size: 1.5rem;
+}
+
+#message {
+    font-size: 1.8rem;
+}
+
