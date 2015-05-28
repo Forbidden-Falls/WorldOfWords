@@ -72,6 +72,10 @@ app.board = function (word) {
         size,
         isClosed = false;
 
+    function getWords() {
+        return words;
+    }
+
     function setSize(boardSize) {
         size = boardSize;
     }
@@ -197,11 +201,12 @@ app.board = function (word) {
 
     return {
         name: getName(),
+        getWords: getWords,
         setSize: setSize,
         getBoardAsJson: getBoardAsJson,
         loadBoard: loadBoard,
         close: close
-};
+    };
 }(app.word);
 
 // SignalR Modul for adding word to board
@@ -215,6 +220,14 @@ app.boardHub = function (board) {
     hub.client.loadBoard = function (content, fillingPercents) {
         board.loadBoard(content);
         $('#filling-percent').text(fillingPercents + '%');
+
+        var boardWords = board.getWords();
+        $('.word')
+        .each(function () {
+            if (boardWords.indexOf(app.search.getWordText($(this))) >= 0) {
+                $(this).parent().addClass('hide');
+            }
+        });
     };
 
     function updatePage(result) {
@@ -248,7 +261,7 @@ app.search = function () {
         var word = $word.text().replace(/[ \n\r]+/g, '');
         return word;
     }
-    
+
     function toggleVisibility($word, condition) {
         if (condition) {
             $word.parent().show();
@@ -258,7 +271,7 @@ app.search = function () {
     }
 
     function showAll() {
-        $words.each(function() {
+        $words.each(function () {
             $(this).parent().show();
         });
     }
@@ -273,7 +286,7 @@ app.search = function () {
 
     function toBegin(letters) {
         $words.each(function () {
-            var $word = $(this); 
+            var $word = $(this);
             var word = getWordText($word);
             toggleVisibility($word, word.indexOf(letters) == 0);
         });
@@ -290,27 +303,26 @@ app.search = function () {
 
     var $loadEvents = function () {
         var $searchInput = $('#letters');
+
+        $('body').on('keydown', function() {
+            $('#letters').focus();
+        });
+
         $searchInput.on('keyup', function (ev) {
             if ($(ev.target).val() == "") {
                 showAll();
                 return;
             }
 
-            var radioVal = $('#radio-buttons input:checked').val();
-            switch (radioVal) {
-                case "1":
-                    byLength($(ev.target).val());
-                    break;
-                case "2":
-                    toBegin($(ev.target).val());
-                    break;
-                case "3":
-                    toContain($(ev.target).val());
-                    break;
-            default:
-            }
+            toContain($(ev.target).val());
         });
+
+
     }();
+
+    return {
+        getWordText: getWordText,
+    };
 }();
 
 app.timer = function () {
@@ -351,6 +363,10 @@ app.timer = function () {
 
         if (currentHours < 0) {
             clearInterval(interval);
+            if (callback) {
+                callback();
+            }
+            
             return;
         }
 

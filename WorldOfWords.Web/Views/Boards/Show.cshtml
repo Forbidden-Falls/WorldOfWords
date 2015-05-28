@@ -13,10 +13,11 @@
 </div>
 <div class="row">
     <div class="col-md-4">До краят остават:  <span id="timer"></span></div>
-    <div class="col-md-2 col-md-offset-6">Точки от полето: <span id="points">@Model.UserPointsFromBoard</span></div>
+    <div class="col-md-2 col-md-offset-6">Баланс: @Model.UserBalance голдъна</div>
 </div>
 <div class="row">
-    <div class="col-md-2">Запълнено: <span id="filling-percent">@Assessor.GetPercentOfFilling(Model.Board.Content)%</span></div>
+    <div class="col-md-4">Запълнено: <span id="filling-percent">@Assessor.GetPercentOfFilling(Model.Board.Content)%</span></div>
+    <div class="col-md-2 col-md-offset-6">Точки от полето: <span id="points">@Model.UserPointsFromBoard</span></div>
 </div>
 <hr />
 <div class="row">
@@ -46,13 +47,11 @@
         <hr />
     </div>
     <div class="col-md-6">
-        <div class="row" id="radio-buttons">
-            <div class="col-md-4"><input id="by-length" name="shearch" type="radio" value="1" checked /> <label for="by-length">Брой букви</label></div>
-            <div class="col-md-4"><input id="to-begin" name="shearch" type="radio" value="2" /> <label for="to-begin">Да започва</label></div>
-            <div class="col-md-4"><input id="to-contain" name="shearch" type="radio" value="3" /> <label for="to-contain">Да съдържа</label></div>
-        </div>
         <div class="row">
             <div class="col-md-12"><input id="letters" type="text" /></div>
+        </div>
+       <div>
+            При търсене "<span class="bold">*</span>"  замества всяка дума
         </div>
         <hr />
         <div class="row words-container">
@@ -84,6 +83,8 @@
         @{
             var durationInSeconds = (int) ((Model.Board.ExpirationDate - DateTime.UtcNow).TotalSeconds);
          }
-        app.timer.setTimer('#timer', @(durationInSeconds >= 0 ? durationInSeconds : 0 ));
+        app.timer.setTimer('#timer', @(durationInSeconds >= 0 ? durationInSeconds : 0 ), function() {
+            document.location = '/';
+        });
     </script>
 }

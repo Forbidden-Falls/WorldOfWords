@@ -12,6 +12,7 @@
     {
         public ActionResult Index()
         {
+            this.BoardsManager.Execute();
             var homeInfo = new HomeViewModel();
             this.Session["boardName"] = null;
 
