@@ -8,7 +8,7 @@
         public const int FillingPercent = 40;
 
         // board size
-        public const int MinSize = 5;
+        public const int MinSize = 6;
         public const int MaxSize = 10;
 
         // board life
