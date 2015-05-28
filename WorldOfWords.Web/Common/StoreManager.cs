@@ -27,11 +27,11 @@ namespace WorldOfWords.Web.Common
             while (balanceInStore < Config.MaxBalanceInStore)
             {
                 var randomIndex = random.Next(0, this.Data.Words.Count());
+                var ranomLength = GetTypeOfWords();
 
                 var word = this.Data.Words
-                    .Where(w => w.Content.Length <= Config.MaxSize)
+                   .Where(w => w.Content.Length == ranomLength)
                     .OrderBy(w => Guid.NewGuid())
-                    .Skip(randomIndex)
                     .Take(1)
                     .First();
 
@@ -73,6 +73,37 @@ namespace WorldOfWords.Web.Common
             {
                 FillStore(balanceInStore);
             }
+        }
+
+        private int GetTypeOfWords()
+        {
+            var totalCount = this.Data.StoreWords.Count();
+            totalCount = totalCount < Config.WordsPerPage
+                ? Config.WordsPerPage
+                : totalCount;
+
+            var storeWords = this.Data.StoreWords
+                .GroupBy(sw => sw.Word.Content.Length)
+                .Select(g => new
+                {
+                    Length = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            var numbers = storeWords.ToDictionary(word => word.Length, word => word.Count);
+
+            for (int i = 2; i <= 10; i++)
+            {
+                if (!numbers.ContainsKey(i))
+                {
+                    numbers.Add(i, 0);
+                }
+            }
+
+            var typeOfWords = numbers.OrderBy(n => n.Value).First().Key;
+            numbers[typeOfWords]++;
+            return typeOfWords;
         }
     }
 }

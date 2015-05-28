@@ -1,5 +1,7 @@
 ﻿namespace WorldOfWords.Web.Common
 {
+    using System;
+
     public static class Config
     {
         public const string Language = "bg";
@@ -31,9 +33,8 @@
         public const int WordsPerPage = 6;
 
         //Store fill configuration
-        public const int MinBalanceInStore = 800;
-        public const int MaxBalanceInStore = 1000;
+        public const int MinBalanceInStore = 400;
+        public const int MaxBalanceInStore = 700;
         public const int InitialQuantityForWordInStore = 2;
-
     }
 }
