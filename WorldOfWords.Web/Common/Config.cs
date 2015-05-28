@@ -4,8 +4,8 @@
     {
         public const string Language = "bg";
 
-        public const int MaxNumberOfEmptyBoards = 3;
-        public const int FillingPercent = 70;
+        public const int MaxNumberOfEmptyBoards = 5;
+        public const int FillingPercent = 40;
 
         // board size
         public const int MinSize = 5;
