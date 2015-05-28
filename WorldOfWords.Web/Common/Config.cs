@@ -31,8 +31,8 @@
         public const int WordsPerPage = 6;
 
         //Store fill configuration
-        public const int MinBalanceInStore = 200;
-        public const int MaxBalanceInStore = 400;
+        public const int MinBalanceInStore = 800;
+        public const int MaxBalanceInStore = 1000;
         public const int InitialQuantityForWordInStore = 2;
 
     }

@@ -104,10 +104,6 @@ body > div.container.body-content > div > aside > fieldset > table > tbody > tr 
     border: solid #000 1px;
 }
 
-#words-section td input[type=number].shoplist {
-    width: 40px;
-}
-
 .bold {
     font-weight: bold;
 }
@@ -135,4 +131,13 @@ body > div.container.body-content > div > aside > fieldset > table > tbody > tr 
 .hide {
     display: none;
 }
+#store {
+    margin-top: 15px;
+}
+#store .form-control {
+    display: inline-block;
+}
 
+#words-section td input[type=number].shoplist {
+    width: 65px;
+}

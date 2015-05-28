@@ -17,6 +17,19 @@ function addShopItemToList(shopItem, shopList) {
     }
 
     shopList.push(shopItem);
+
+    updateCart(shopList);
+}
+
+function deleteAllFromCart(shopList) {
+    shopList = [];
+
+    updateCart(shopList).success(loadShopCartIntoView);
+    location.reload();
+}
+
+function deleteFromCart(wordId, shopList) {
+    deleteShopItemFromList(wordId, shopList).success(loadShopCartIntoView);
 }
 
 function deleteShopItemFromList(wordId, shopList) {
@@ -27,17 +40,26 @@ function deleteShopItemFromList(wordId, shopList) {
             shopList.splice(i, 1);
         }
     }
+
+    return updateCart(shopList);
 }
 
-function loadShopCartView(shopList) {
-    shopList = JSON.stringify(shopList);
+function loadShopCartIntoView(shopList) {
+    if (shopList.shopList === null) {
+        $("#shop-cart").html("");
+        return;
+    }
 
-    return $.ajax({
+    shopList = JSON.stringify(shopList); 
+
+    $.ajax({
         cache: false,
         url: "Store/Cart",
         type: "POST",
         contentType: "application/json",
         data: shopList
+    }).success(function (data) {
+        $("#shop-cart").html(data);
     }).error(ajaxError);
 }
 
@@ -50,18 +72,32 @@ function buyWords(shopList) {
         type: "POST",
         contentType: "application/json",
         data: shopList
-    }).success(function (data) {
-        var output = "";
-        
-        data.errors.forEach(function(err) {
-            output += err + "\n";
-        });
+    }).success(buyWordsSuccess).error(ajaxError);
+}
 
-        output += "Balance left: " + data.balance;
+function updateCart(shopList) {
+    shopList = JSON.stringify(shopList);
 
-        alert(output);
-        location.reload();
-    }).error(ajaxError);
+    return $.ajax({
+        cache: false,
+        url: "Store/UpdateCart",
+        type: "POST",
+        contentType: "application/json",
+        data: shopList
+    });
+}
+
+function buyWordsSuccess(data) {
+    var output = "";
+
+    data.errors.forEach(function (err) {
+        output += err + "\n";
+    });
+
+    output += "Balance left: " + data.balance;
+
+    alert(output);
+    location.reload();
 }
 
 function ajaxError(error) {

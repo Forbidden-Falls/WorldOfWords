@@ -8,10 +8,11 @@
         {
             InsertionMode = InsertionMode.Replace,
             UpdateTargetId = "words-section"
-        }, new { @id = "search-form" }))
+        }, new { @id = "search-form"}))
     {
         <p>
-            Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @id = "search-box" })
+            <label for="search-box">Search:</label>
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @id = "search-box", @class="form-control" })
         </p>
     }
     <div id="words-section">
@@ -30,5 +31,16 @@
         $("#search-form").submit();
     });
 
+    var jsonShopList;
     var shopList = [];
+
+    @if (@Session["shopList"] != null)
+    {
+        @:jsonShopList = '@Html.Raw(@Session["shopList"])';
+    }
+    
+    if (jsonShopList != null && jsonShopList != "null") {
+        shopList = JSON.parse(jsonShopList);
+        loadShopCartIntoView(shopList);
+    }
 </script>

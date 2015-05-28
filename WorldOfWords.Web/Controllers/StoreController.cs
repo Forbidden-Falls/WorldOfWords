@@ -1,8 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using System.Web.UI;
 using Models;
+using Newtonsoft.Json;
 using WebGrease.Css.Extensions;
 using WorldOfWords.Web.BindingModels;
 
@@ -127,6 +129,12 @@ namespace WorldOfWords.Web.Controllers
             return PartialView(cartItems);
         }
 
+        public ActionResult UpdateCart(List<ShopItem> shopList)
+        {
+            this.Session["shopList"] = JsonConvert.SerializeObject(shopList);
+
+            return Json(new { shopList }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Buy(List<ShopItem> shopList)
         {
             var errors = new List<string>();
@@ -198,6 +206,7 @@ namespace WorldOfWords.Web.Controllers
 
             Task.Factory.StartNew(() => this.StoreManager.FillStoreIfNeeded());
 
+            this.Session["shopList"] = null;
             return Json(new { errors, balance = userDb.Balance }, JsonRequestBehavior.AllowGet);
         }
     }

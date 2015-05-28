@@ -2,6 +2,18 @@
 
 <table class="table">
     <tr>
+        <td colspan="4" style="text-align: right">
+            <h3>Total: @ViewBag.TotalPrice</h3>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: right">
+            <input type="button" name="buy" value="Buy" class="btn btn-lg btn-success" onclick=" buyWords(shopList) "/>
+            <input type="button" name="delete-all" value="Delete All" class="btn btn-lg btn-danger" onclick="deleteAllFromCart(shopList)" />
+        </td>
+    </tr>
+
+    <tr>
         <th>Word</th>
         <th>Quantity</th>
         <th>Price</th>
@@ -18,27 +30,10 @@
                 @word.Quantity
             </td>
             <td>
-                @word.Price * @word.Quantity = @(word.Price * word.Quantity)
+                @word.Price * @word.Quantity = @(word.Price*word.Quantity)
             </td>
-            <td><input type="button" name="delete" value="Delete" class="btn btn-danger" onclick="deleteFromCart(@word.WordId)"/></td>
+            <td><input type="button" name="delete" value="Delete" class="btn btn-danger" onclick="deleteFromCart(@word.WordId, shopList)"/></td>
         </tr>
     }
     </tbody>
-    <tr>
-        <td colspan="4" style="text-align: right">
-            <h3>Total: @ViewBag.TotalPrice</h3>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4" style="text-align: center"><input type="button" name="buy" value="Buy" class="btn btn-lg btn-success" onclick="buyWords(shopList)"/></td>
-    </tr>
 </table>
-
-<script>
-    function deleteFromCart(wordId) {
-        deleteShopItemFromList(wordId, shopList);
-        loadShopCartView(shopList).success(function(data) {
-            $("#shop-cart").html(data);
-        });
-    }
-</script>

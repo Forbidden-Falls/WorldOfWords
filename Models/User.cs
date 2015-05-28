@@ -11,14 +11,14 @@
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class User : IdentityUser
     {
-        private const int StartPoints = 200;
+        private const int StartPoints = 300;
 
         private ICollection<WordsUsers> wordsUsers;
         private ICollection<BoardsUsers> boardsUsers;
 
         public User()
         {
-            this.RegisteredOn = DateTime.UtcNow;
+            this.RegisteredOn = DateTime.Now;
             this.wordsUsers = new HashSet<WordsUsers>();
             this.boardsUsers = new HashSet<BoardsUsers>();
             this.Balance = StartPoints;

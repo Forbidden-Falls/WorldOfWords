@@ -52,9 +52,8 @@
                 @(ViewBag.Assessor.GetPointsByWord(word.Content))
             </td>
             <td>
-                <label>
-                    <input type="number" name="shoplist" id="shoplist-@word.Id" class="shoplist" min="0" max="@word.Quantity" />Buy
-                </label>
+                <label for="shoplist-@word.Id">Buy </label>
+                <input type="number" name="shoplist" id="shoplist-@word.Id" class="shoplist form-control" min="0" max="@word.Quantity" />
             </td>
         </tr>
     }
@@ -91,9 +90,7 @@
                 addShopItemToList(shopItem, shopList);
             }
 
-            loadShopCartView(shopList).success(function (data) {
-                $("#shop-cart").html(data);
-            });
+            loadShopCartIntoView(shopList);
 
         });
 
