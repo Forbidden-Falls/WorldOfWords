@@ -26,6 +26,10 @@
         public const int SecondBonusLevel = 70;
         public const int ThirdBonusLevel = 85;
 
+
+        //Store configuration
+        public const int WordsPerPage = 6;
+
         //Store fill configuration
         public const int MinBalanceInStore = 200;
         public const int MaxBalanceInStore = 400;

@@ -29,6 +29,7 @@ namespace WorldOfWords.Web.Common
                 var randomIndex = random.Next(0, this.Data.Words.Count());
 
                 var word = this.Data.Words
+                    .Where(w => w.Content.Length <= Config.MaxSize)
                     .OrderBy(w => Guid.NewGuid())
                     .Skip(randomIndex)
                     .Take(1)

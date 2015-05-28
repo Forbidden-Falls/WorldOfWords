@@ -22,8 +22,6 @@ namespace WorldOfWords.Web.Controllers
     [Authorize]
     public class StoreController : BaseController
     {
-        private const int PageSize = 3;
-
         public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             return View();
@@ -69,6 +67,7 @@ namespace WorldOfWords.Web.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.LengthSortParam = sortOrder == "Length" ? "length_desc" : "Length";
 
             switch (sortOrder)
             {
@@ -81,6 +80,12 @@ namespace WorldOfWords.Web.Controllers
                 case "date_desc":
                     words = words.OrderByDescending(w => w.DateAdded);
                     break;
+                case "Length":
+                    words = words.OrderBy(w => w.Content.Length);
+                    break;
+                case "length_desc":
+                    words = words.OrderByDescending(w => w.Content.Length);
+                    break;
                 default:  // Name ascending 
                     words = words.OrderBy(s => s.Content);
                     break;
@@ -88,7 +93,7 @@ namespace WorldOfWords.Web.Controllers
             #endregion
 
             int pageNumber = (page ?? 1);
-            return PartialView(words.ToPagedList(pageNumber, PageSize));
+            return PartialView(words.ToPagedList(pageNumber, Config.WordsPerPage));
         }
 
         [HttpPost]

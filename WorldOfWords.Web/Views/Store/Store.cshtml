@@ -11,7 +11,14 @@
                 })
         </th>
         <th>
-            @Ajax.ActionLink("Date Added", "Store", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions()
+            @Ajax.ActionLink("Date Added", "Store", new {sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter}, new AjaxOptions()
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "words-section"
+            })
+        </th>
+        <th>
+            @Ajax.ActionLink("Length", "Store", new { sortOrder = ViewBag.LengthSortParam, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions()
                 {
                     InsertionMode = InsertionMode.Replace,
                     UpdateTargetId = "words-section"
@@ -31,6 +38,9 @@
             </td>
             <td>
                 @word.DateAdded
+            </td>
+            <td>
+                @word.Content.Length
             </td>
             <td>
                 <div id="word-@word.Id-quantity">@word.Quantity</div>
