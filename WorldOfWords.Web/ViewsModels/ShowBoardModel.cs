@@ -14,5 +14,7 @@
         public IList<string> UserWords { get; set; }
 
         public IList<int> WordsPoints { get; set; }
+
+        public int UserBalance { get; set; }
     }
 }

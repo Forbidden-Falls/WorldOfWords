@@ -25,8 +25,7 @@
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<WorldOfWordsDbContext, Configuration>());
             
             this.WordAssessor = new Assessor(Config.Language, this.Data);
-            var boardManager = new BoardsManager(this.Data);
-            boardManager.Execute();
+            this.BoardsManager = new BoardsManager(this.Data);
 
             this.StoreManager = new StoreManager(this.Data, this.WordAssessor);
         }
@@ -36,5 +35,7 @@
         protected Assessor WordAssessor { get; set; }
 
         protected StoreManager StoreManager { get; set; }
+
+        protected BoardsManager BoardsManager { get; set; }
     }
 }

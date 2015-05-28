@@ -56,7 +56,8 @@
                 UserWords = userWords,
                 WordsPoints = wordsPoints,
                 UserPointsFromBoard = userPointsFromBoard,
-                EarnedUserPoints = user.EarnedPoints
+                EarnedUserPoints = user.EarnedPoints,
+                UserBalance = user.Balance
             };
 
             return View(showBoardModel);
