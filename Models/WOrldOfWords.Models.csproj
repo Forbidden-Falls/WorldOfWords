@@ -58,6 +58,7 @@
     <Compile Include="BoardName.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LettersPoints.cs" />
+    <Compile Include="Statistics.cs" />
     <Compile Include="StoreWord.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

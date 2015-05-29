@@ -26,7 +26,6 @@
             AddLettersPoints(context);
         }
 
-
         private void AddLettersPoints(WorldOfWordsDbContext context)
         {
             if (context.LettersPoints.Any())

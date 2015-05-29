@@ -27,6 +27,8 @@
 
         public DbSet<BoardName> BoardNames { get; set; }
 
+        public DbSet<Statistics> Statistics { get; set; }
+
         public static WorldOfWordsDbContext Create()
         {
             return new WorldOfWordsDbContext();
@@ -34,14 +36,15 @@
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            // Configure StudentId as PK for StudentAddress
             //modelBuilder.Entity<BoardName>()
             //    .HasKey(e => e.Id);
 
-            // Configure StudentId as FK for StudentAddress
             modelBuilder.Entity<Board>()
-                .HasRequired(b => b.Name) // Mark StudentAddress is optional for Student
-                .WithOptional(n => n.Board); // Create inverse relationship
+                .HasRequired(b => b.Name) 
+                .WithOptional(n => n.Board); 
+
+            modelBuilder.Entity<Statistics>()
+                .HasRequired(s => s.User); 
 
             base.OnModelCreating(modelBuilder);
         }
