@@ -75,6 +75,11 @@
             return View(homeInfo);
         }
 
+        public ActionResult Rating()
+        {
+            return View();
+        }
+
         public ActionResult Rules()
         {
             return View();
