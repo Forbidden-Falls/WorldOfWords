@@ -190,7 +190,6 @@
     <Compile Include="Common\BoardsManager.cs" />
     <Compile Include="Common\Config.cs" />
     <Compile Include="Common\LogEvent.cs" />
-    <Compile Include="Common\StatisticsManager.cs" />
     <Compile Include="Common\StoreManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -228,7 +227,6 @@
     <Content Include="Images\board2.jpg" />
     <Content Include="Images\Capture.PNG" />
     <Content Include="Images\Capture2.PNG" />
-    <Content Include="Images\Loading.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -291,7 +289,6 @@
     <Content Include="Views\Store\Cart.cshtml" />
     <Content Include="Views\Home\Rules.cshtml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
-    <Content Include="Views\Home\Rating.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
