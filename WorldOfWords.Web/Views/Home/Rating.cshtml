@@ -1,5 +1,26 @@
-﻿@model Models.User
+﻿@model WorldOfWords.Web.ViewsModels.RaitingViewModel
 
 <h2>Статистика</h2>
-<img src="~/Images/Loading.gif"/>
-<h3>тази страница се конструира в момента</h3>
+<img style="width: 200px;" src="~/Images/Loading.gif"/>
+<h3>Тази страница се конструира в момента</h3>
+
+
+<h3>Balance TOP100</h3>
+<table>
+    <tr>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    @foreach (var i in @Model.UsersStatsBalance)
+    {
+
+    }
+</table>
+

@@ -77,7 +77,37 @@
 
         public ActionResult Rating()
         {
-            return View();
+            var usersStatsBalanceOrdered = this.Data.Users.OrderBy(u => u.Balance).Select(u => new List<User>
+                {
+                    new User
+                    {
+                        UserName = u.UserName,
+                        
+                        Balance = u.Balance,
+                        EarnedPoints = u.EarnedPoints
+                    }
+                })
+                .FirstOrDefault()
+                .ToList();
+
+            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderBy(x=>x.EarnedPoints)
+                .ToList();
+
+            var LoggedUser = new User();
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                LoggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
+            }
+
+            var model = new RaitingViewModel
+                {
+                    LoggedUser = LoggedUser,
+                    UsersStatsBalance = usersStatsBalanceOrdered,
+                    UsersStatsPoints = usersStatsPointsOrdered
+                };
+
+            return View(model);
         }
 
         public ActionResult Rules()
