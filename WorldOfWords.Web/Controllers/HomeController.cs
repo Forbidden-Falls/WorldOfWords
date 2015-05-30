@@ -77,21 +77,18 @@
 
         public ActionResult Rating()
         {
-            var usersStatsBalanceOrdered = this.Data.Users.OrderBy(u => u.Balance).Select(u => new List<User>
+            var query = this.Data.Users.OrderByDescending(u => u.Balance).ToList();
+
+            var usersStatsBalanceOrdered = query.Select(u => 
+                new User
                 {
-                    new User
-                    {
-                        UserName = u.UserName,
-                        
-                        Balance = u.Balance,
-                        EarnedPoints = u.EarnedPoints
-                    }
+                    UserName = u.UserName,
+                    Balance = u.Balance,
+                    EarnedPoints = u.EarnedPoints
                 })
-                .FirstOrDefault()
                 .ToList();
 
-            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderBy(x=>x.EarnedPoints)
-                .ToList();
+            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints).ToList();
 
             var LoggedUser = new User();
             if (User.Identity.IsAuthenticated)
@@ -114,5 +111,12 @@
         {
             return View();
         }
+    }
+
+    public class RaitingViewModel
+    {
+        public List<User> UsersStatsBalance { get; set; }
+        public List<User> UsersStatsPoints { get; set; }
+        public User LoggedUser { get; set; }
     }
 }

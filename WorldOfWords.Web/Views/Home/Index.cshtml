@@ -45,7 +45,6 @@
                         <tr class="warning">
                             <th>Име</th>
                             <th>Площ</th>
-                            <th>Изтича на</th>
                             <th>Оставащи минути</th>
                             <th>Запълнено</th>
                             <th>Точки</th>
@@ -61,10 +60,7 @@
                                     <a href="@("../board/" + board.Board.Name.Text)"><strong>@(board.Board.Name.Text)</strong></a>
                                 </td>
                                 <td>
-                                    Размер: @board.Board.Size x @board.Board.Size
-                                </td>
-                                <td>
-                                    @board.Board.ExpirationDate.ToString("HH:MM dd-MMM-yy")г.
+                                   @board.Board.Size x @board.Board.Size
                                 </td>
                                 <td>
                                     <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>
@@ -109,7 +105,6 @@
                 <tr class="warning">
                     <th>Име</th>
                     <th>Площ</th>
-                    <th>Изтича на</th>
                     <th>Оставащи минути</th>
                     <th>Запълнено</th>
                 </tr>
@@ -123,10 +118,7 @@
                             <a href="@("../board/" + board.Name.Text)"><strong>@(board.Name.Text)</strong></a>
                         </td>
                         <td>
-                            Размер: @board.Size x @board.Size
-                        </td>
-                        <td>
-                            @board.ExpirationDate.ToString("HH:MM dd-MMM-yy")г.
+                           @board.Size x @board.Size
                         </td>
                         <td>
                             <strong>@(string.Format("{0:f0}", expired.TotalMinutes))</strong>

@@ -1,26 +1,64 @@
-﻿@model WorldOfWords.Web.ViewsModels.RaitingViewModel
+﻿@model WorldOfWords.Web.Controllers.RaitingViewModel
+
+@{
+    ViewBag.Title = "Статистика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var odd = true;
+}
 
 <h2>Статистика</h2>
-<img style="width: 200px;" src="~/Images/Loading.gif"/>
-<h3>Тази страница се конструира в момента</h3>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.UsersStatsBalance != null && Model.UsersStatsBalance.Count > 0)
+        {
+            <h5><strong>Голдъни</strong></h5>
+            <table class="table">
+                <tr class="warning">
+                    <th>Име</th>
+                    <th>Голдъни</th>
+                </tr>
 
+                @foreach (var user in Model.UsersStatsBalance)
+                {
+                    <tr class="@(odd ? "info" : "success")">
+                        <td>
+                            @user.UserName
+                        </td>
+                        <td>
+                            @user.Balance
+                        </td>
+                    </tr>
+                    odd = !odd;
+                }
 
-<h3>Balance TOP100</h3>
-<table>
-    <tr>
-        <th>
+            </table>
+        }
+    </div>
+    <div class="col-md-6">
+        @if (Model.UsersStatsPoints != null && Model.UsersStatsPoints.Count > 0)
+        {
+            odd = true;
+            <h5><strong>Точки</strong></h5>
+            <table class="table">
+                <tr class="warning">
+                    <th>Име</th>
+                    <th>Точки</th>
+                </tr>
 
-        </th>
-        <th>
+                @foreach (var user in Model.UsersStatsPoints)
+                {
+                    <tr class="@(odd ? "info" : "success")">
+                        <td>
+                            @user.UserName
+                        </td>
+                        <td>
+                            @user.EarnedPoints
+                        </td>
+                    </tr>
+                    odd = !odd;
+                }
 
-        </th>
-        <th>
-
-        </th>
-    </tr>
-    @foreach (var i in @Model.UsersStatsBalance)
-    {
-
-    }
-</table>
-
+            </table>
+        }
+    </div>
+</div>
