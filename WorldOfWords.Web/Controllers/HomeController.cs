@@ -77,7 +77,8 @@
 
         public ActionResult Rating()
         {
-            var query = this.Data.Users.OrderByDescending(u => u.Balance).ToList();
+            var query = this.Data.Users.OrderByDescending(u => u.Balance)
+                .ToList();
 
             var usersStatsBalanceOrdered = query.Select(u => 
                 new User
@@ -88,7 +89,9 @@
                 })
                 .ToList();
 
-            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints).ToList();
+            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
+                .Take(100)
+                .ToList();
 
             var LoggedUser = new User();
             if (User.Identity.IsAuthenticated)
