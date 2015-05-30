@@ -4,6 +4,7 @@
     ViewBag.Title = "Статистика";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var odd = true;
+    int rank = 1;
 }
 
 <h2>Статистика</h2>
@@ -14,6 +15,7 @@
             <h5><strong>Голдъни</strong></h5>
             <table class="table">
                 <tr class="warning">
+                    <th>Място</th>
                     <th>Име</th>
                     <th>Голдъни</th>
                 </tr>
@@ -22,6 +24,9 @@
                 {
                     <tr class="@(odd ? "info" : "success")">
                         <td>
+                            @rank
+                        </td>
+                        <td>
                             @user.UserName
                         </td>
                         <td>
@@ -29,6 +34,7 @@
                         </td>
                     </tr>
                     odd = !odd;
+                    rank ++;
                 }
 
             </table>
@@ -37,10 +43,12 @@
     <div class="col-md-6">
         @if (Model.UsersStatsPoints != null && Model.UsersStatsPoints.Count > 0)
         {
+            rank = 1;
             odd = true;
             <h5><strong>Точки</strong></h5>
             <table class="table">
                 <tr class="warning">
+                    <th>Място</th>
                     <th>Име</th>
                     <th>Точки</th>
                 </tr>
@@ -49,6 +57,9 @@
                 {
                     <tr class="@(odd ? "info" : "success")">
                         <td>
+                            @rank
+                        </td>
+                        <td>
                             @user.UserName
                         </td>
                         <td>
@@ -56,6 +67,7 @@
                         </td>
                     </tr>
                     odd = !odd;
+                    rank ++;
                 }
 
             </table>

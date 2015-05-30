@@ -50,10 +50,12 @@
     {
         [Required]
         [Display(Name = "Username")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
@@ -65,22 +67,24 @@
     {
         [Required]
         [EmailAddress]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
         [Display(Name = "Username")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string Username { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Парола")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Потвърди парола")]
+        [Compare("Password", ErrorMessage = "Новата парола и нейното потвърждение не са еднакви. Опитай пак.")]
         public string ConfirmPassword { get; set; }
     }
 
