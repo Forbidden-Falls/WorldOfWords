@@ -106,9 +106,9 @@
                     boardsUsers.UserPoints += pointsOfWord;
                     var user = this.Data.Users.First(u => u.Id == userId);
 
-                    if (user.Statistics.MostPointsOfWord == null || user.Statistics.MostPointsOfWord < pointsOfWord)
+                    if (user.MostPointsOfWord == null || user.MostPointsOfWord < pointsOfWord)
                     {
-                        user.Statistics.MostPointsOfWord = pointsOfWord;
+                        user.MostPointsOfWord = pointsOfWord;
                     }
 
                     this.Data.SaveChanges();

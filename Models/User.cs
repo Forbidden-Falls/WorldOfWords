@@ -30,6 +30,12 @@
         [DefaultValue(StartPoints)]
         public int Balance { get; set; }
 
+        [DefaultValue(0)]
+        public long SpentMoney { get; set; }
+
+        [DefaultValue(0)]
+        public int MostPointsOfWord { get; set; }
+
         public DateTime RegisteredOn { get; set; }
 
         public virtual ICollection<WordsUsers> WordsUsers
@@ -42,8 +48,6 @@
         {
             get { return this.boardsUsers; }
         }
-
-        public virtual Statistics Statistics { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {

@@ -1,4 +1,5 @@
-﻿@model WorldOfWords.Web.ViewsModels.RaitingViewModel
+﻿@using Models
+@model WorldOfWords.Web.ViewsModels.RaitingViewModel
 
 @{
     ViewBag.Title = "Статистика";
@@ -21,7 +22,6 @@
                         <td>Име</td>
                         <td>Голдъни</td>
                     </tr>
-                    <tbody>
                         @foreach (var user in Model.UsersStatsBalance)
                         {
                             <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
@@ -38,7 +38,6 @@
                             odd = !odd;
                             rank++;
                         }
-                    </tbody>
                 </table>
             </section>
         }
@@ -62,7 +61,6 @@
                         <th>Име</th>
                         <th>Точки</th>
                     </tr>
-
                     @foreach (var user in Model.UsersStatsPoints)
                     {
                         <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
@@ -117,7 +115,7 @@
                                 @user.UserName
                             </td>
                             <td>
-                                @user.Statistics.MostPointsOfWord
+                                @user.MostPointsOfWord
                             </td>
                         </tr>
                         odd = !odd;
@@ -156,7 +154,7 @@
                                 @user.UserName
                             </td>
                             <td>
-                                @user.Statistics.SpentMoney
+                                @user.SpentMoney
                             </td>
                         </tr>
                         odd = !odd;

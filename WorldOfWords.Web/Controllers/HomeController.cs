@@ -84,8 +84,14 @@
                 LoggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
             }
 
-            var queryOrderedByBalance = this.Data.Users.Include(u=>u.Statistics).OrderByDescending(u => u.Balance).ToList();
+            var queryOrderedByBalance = this.Data.Users
+                .OrderByDescending(u => u.Balance)
+                .ToList();
 
+            if (queryOrderedByBalance.Count < 0)
+            {
+                return View();
+            }
             var usersStatsBalanceOrdered = queryOrderedByBalance
                 .Take(100)
                 .Select(u =>
@@ -94,22 +100,20 @@
                         Id = u.Id,
                         UserName = u.UserName,
                         Balance = u.Balance,
-                        Statistics = new Statistics
-                        {
-                            MostPointsOfWord = u.Statistics.MostPointsOfWord,
-                            SpentMoney = u.Statistics.SpentMoney
-                        },
-                        EarnedPoints = u.EarnedPoints
+                        MostPointsOfWord = u.MostPointsOfWord,
+                        SpentMoney = u.SpentMoney,
+                        EarnedPoints = u.EarnedPoints,
+                        Email = u.Email
                     })
                 .ToList();
 
             var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
                 .ToList();
 
-            var usersStatsSpendMoneyOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.Statistics.SpentMoney)
+            var usersStatsSpendMoneyOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
                 .ToList();
 
-            var usersStatsMostPointsOfWord = usersStatsBalanceOrdered.OrderByDescending(x => x.Statistics.SpentMoney)
+            var usersStatsMostPointsOfWord = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
                .ToList();
 
             var raitingViewModel = new RaitingViewModel
@@ -139,13 +143,13 @@
                 raitingViewModel.UserPlacePoints++;
 
                 raitingViewModel.UserPlaceSpendMoney = queryOrderedByBalance
-                    .OrderByDescending(u => u.Statistics.SpentMoney)
+                    .OrderByDescending(u => u.SpentMoney)
                     .ToList()
                     .FindIndex(u => u.Id == LoggedUser.Id);
                 raitingViewModel.UserPlaceSpendMoney++;
 
                 raitingViewModel.UserPlaceMostPointOfWord = queryOrderedByBalance
-                    .OrderByDescending(u => u.Statistics.MostPointsOfWord)
+                    .OrderByDescending(u => u.MostPointsOfWord)
                     .ToList()
                     .FindIndex(u => u.Id == LoggedUser.Id);
                 raitingViewModel.UserPlaceMostPointOfWord++;

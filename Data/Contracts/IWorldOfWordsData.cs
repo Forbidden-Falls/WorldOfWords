@@ -14,7 +14,6 @@
         EFRepository<StoreWord> StoreWords { get; }
         EFRepository<BoardsUsers> BoardsUsers { get; }
         EFRepository<BoardName> BoardName { get; }
-        EFRepository<Statistics> Statistics { get; }
 
         void SaveChanges();
     }

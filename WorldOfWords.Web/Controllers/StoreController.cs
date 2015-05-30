@@ -197,16 +197,12 @@ namespace WorldOfWords.Web.Controllers
                 storeWord.Quantity -= shopItem.Quantity;
                 var spentMoney =  this.WordAssessor.GetPointsByWord(storeWord.Word.Content) * shopItem.Quantity;
                 userDb.Balance -= spentMoney;
-                if (userDb.Statistics == null)
+                if (userDb.SpentMoney <= 0)
                 {
-                    userDb.Statistics = new Statistics
-                    {
-                        Id = currentUserId,
-                        SpentMoney = userDb.EarnedPoints
-                    };
+                    userDb.SpentMoney = userDb.EarnedPoints;
                 }
 
-                userDb.Statistics.SpentMoney += spentMoney;
+                userDb.SpentMoney += spentMoney;
 
                 if (storeWord.Quantity == 0)
                 {
