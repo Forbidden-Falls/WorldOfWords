@@ -23,4 +23,25 @@
 
         public List<Board> AllBoards { get; set; }
     }
+
+    public class RaitingViewModel
+    {
+        public int UserPlaceBalance { get; set; }
+
+        public List<User> UsersStatsBalance { get; set; }
+
+        public int UserPlacePoints { get; set; }
+
+        public List<User> UsersStatsPoints { get; set; }
+
+        public int UserPlaceSpendMoney { get; set; }
+
+        public List<User> UsersStatsSpendMoney { get; set; }
+
+        public int UserPlaceMostPointOfWord { get; set; }
+
+        public List<User> UsersStatsMostPointOfWord { get; set; }
+
+        public User LoggedUser { get; set; }
+    }
 }

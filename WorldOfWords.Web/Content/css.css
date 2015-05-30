@@ -39,8 +39,6 @@ body > div.container.body-content > div > aside > fieldset > table > tbody > tr 
     padding: 0 10px;
 }
 
-
-
 body > div.container.body-content > div > aside > fieldset > p {
     color: gainsboro;
     font-size: 10px;
@@ -131,13 +129,29 @@ body > div.container.body-content > div > aside > fieldset > table > tbody > tr 
 .hide {
     display: none;
 }
+
 #store {
     margin-top: 15px;
 }
-#store .form-control {
-    display: inline-block;
-}
+
+    #store .form-control {
+        display: inline-block;
+    }
 
 #words-section td input[type=number].shoplist {
     width: 65px;
+}
+/*Raitings*/
+body > div.container.body-content > div > div > section {
+    min-height: 50px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+body > div.container.body-content > div > div > section > table {
+    padding: 0;
+    margin: 0;
+}
+body > div.container.body-content > div > div {
+    margin-bottom: 10px;
 }

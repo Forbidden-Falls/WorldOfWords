@@ -77,22 +77,6 @@
 
         public ActionResult Rating()
         {
-            var query = this.Data.Users.OrderByDescending(u => u.Balance)
-                .ToList();
-
-            var usersStatsBalanceOrdered = query.Select(u => 
-                new User
-                {
-                    UserName = u.UserName,
-                    Balance = u.Balance,
-                    EarnedPoints = u.EarnedPoints
-                })
-                .ToList();
-
-            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
-                .Take(100)
-                .ToList();
-
             var LoggedUser = new User();
             if (User.Identity.IsAuthenticated)
             {
@@ -100,26 +84,79 @@
                 LoggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
             }
 
-            var model = new RaitingViewModel
+            var queryOrderedByBalance = this.Data.Users.Include(u=>u.Statistics).OrderByDescending(u => u.Balance).ToList();
+
+            var usersStatsBalanceOrdered = queryOrderedByBalance
+                .Take(100)
+                .Select(u =>
+                    new User
+                    {
+                        Id = u.Id,
+                        UserName = u.UserName,
+                        Balance = u.Balance,
+                        Statistics = new Statistics
+                        {
+                            MostPointsOfWord = u.Statistics.MostPointsOfWord,
+                            SpentMoney = u.Statistics.SpentMoney
+                        },
+                        EarnedPoints = u.EarnedPoints
+                    })
+                .ToList();
+
+            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
+                .ToList();
+
+            var usersStatsSpendMoneyOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.Statistics.SpentMoney)
+                .ToList();
+
+            var usersStatsMostPointsOfWord = usersStatsBalanceOrdered.OrderByDescending(x => x.Statistics.SpentMoney)
+               .ToList();
+
+            var raitingViewModel = new RaitingViewModel
                 {
                     LoggedUser = LoggedUser,
                     UsersStatsBalance = usersStatsBalanceOrdered,
-                    UsersStatsPoints = usersStatsPointsOrdered
+                    UsersStatsPoints = usersStatsPointsOrdered,
+                    UsersStatsSpendMoney = usersStatsSpendMoneyOrdered,
+                    UsersStatsMostPointOfWord = usersStatsMostPointsOfWord,
+
                 };
 
-            return View(model);
+            // If have logged user(Aways TRUE for now), fill this prop with user place in the Rang Lists.
+            // Work With Query list downloaded once from context.
+            if (LoggedUser.Id != null)
+            {
+                raitingViewModel.UserPlaceBalance = queryOrderedByBalance
+                    .OrderByDescending(u => u.Balance)
+                    .ToList()
+                    .FindIndex(u => u.Id == LoggedUser.Id);
+                raitingViewModel.UserPlaceBalance++;
+
+                raitingViewModel.UserPlacePoints = queryOrderedByBalance
+                    .OrderByDescending(u => u.EarnedPoints)
+                    .ToList()
+                    .FindIndex(u => u.Id == LoggedUser.Id);
+                raitingViewModel.UserPlacePoints++;
+
+                raitingViewModel.UserPlaceSpendMoney = queryOrderedByBalance
+                    .OrderByDescending(u => u.Statistics.SpentMoney)
+                    .ToList()
+                    .FindIndex(u => u.Id == LoggedUser.Id);
+                raitingViewModel.UserPlaceSpendMoney++;
+
+                raitingViewModel.UserPlaceMostPointOfWord = queryOrderedByBalance
+                    .OrderByDescending(u => u.Statistics.MostPointsOfWord)
+                    .ToList()
+                    .FindIndex(u => u.Id == LoggedUser.Id);
+                raitingViewModel.UserPlaceMostPointOfWord++;
+            }
+
+            return View(raitingViewModel);
         }
 
         public ActionResult Rules()
         {
             return View();
         }
-    }
-
-    public class RaitingViewModel
-    {
-        public List<User> UsersStatsBalance { get; set; }
-        public List<User> UsersStatsPoints { get; set; }
-        public User LoggedUser { get; set; }
     }
 }

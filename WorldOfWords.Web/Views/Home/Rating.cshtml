@@ -1,10 +1,11 @@
-﻿@model WorldOfWords.Web.Controllers.RaitingViewModel
+﻿@model WorldOfWords.Web.ViewsModels.RaitingViewModel
 
 @{
     ViewBag.Title = "Статистика";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var odd = true;
+    bool odd = true;
     int rank = 1;
+
 }
 
 <h2>Статистика</h2>
@@ -13,31 +14,39 @@
         @if (Model.UsersStatsBalance != null && Model.UsersStatsBalance.Count > 0)
         {
             <h5><strong>Голдъни</strong></h5>
-            <table class="table">
-                <tr class="warning">
-                    <th>Място</th>
-                    <th>Име</th>
-                    <th>Голдъни</th>
-                </tr>
-
-                @foreach (var user in Model.UsersStatsBalance)
-                {
-                    <tr class="@(odd ? "info" : "success")">
-                        <td>
-                            @rank
-                        </td>
-                        <td>
-                            @user.UserName
-                        </td>
-                        <td>
-                            @user.Balance
-                        </td>
+            <section>
+                <table class="table table-striped table-hover">
+                    <tr class="warning">
+                        <td>Място</td>
+                        <td>Име</td>
+                        <td>Голдъни</td>
                     </tr>
-                    odd = !odd;
-                    rank ++;
-                }
-
-            </table>
+                    <tbody>
+                        @foreach (var user in Model.UsersStatsBalance)
+                        {
+                            <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
+                                <td>
+                                    @rank
+                                </td>
+                                <td>
+                                    @user.UserName
+                                </td>
+                                <td>
+                                    @user.Balance
+                                </td>
+                            </tr>
+                            odd = !odd;
+                            rank++;
+                        }
+                    </tbody>
+                </table>
+            </section>
+        }
+        @if (Model.UserPlaceBalance > 100)
+        {
+            <div>
+                Твоето място: <strong>@Model.UserPlaceBalance</strong>
+            </div>
         }
     </div>
     <div class="col-md-6">
@@ -46,31 +55,119 @@
             rank = 1;
             odd = true;
             <h5><strong>Точки</strong></h5>
-            <table class="table">
-                <tr class="warning">
-                    <th>Място</th>
-                    <th>Име</th>
-                    <th>Точки</th>
-                </tr>
-
-                @foreach (var user in Model.UsersStatsPoints)
-                {
-                    <tr class="@(odd ? "info" : "success")">
-                        <td>
-                            @rank
-                        </td>
-                        <td>
-                            @user.UserName
-                        </td>
-                        <td>
-                            @user.EarnedPoints
-                        </td>
+            <section>
+                <table class="table table-striped table-hover ">
+                    <tr class="warning">
+                        <th>Място</th>
+                        <th>Име</th>
+                        <th>Точки</th>
                     </tr>
-                    odd = !odd;
-                    rank ++;
-                }
 
-            </table>
+                    @foreach (var user in Model.UsersStatsPoints)
+                    {
+                        <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
+                            <td>
+                                @rank
+                            </td>
+                            <td>
+                                @user.UserName
+                            </td>
+                            <td>
+                                @user.EarnedPoints
+                            </td>
+                        </tr>
+                        odd = !odd;
+                        rank++;
+                    }
+
+                </table>
+            </section>
+        }
+        @if (Model.UserPlaceBalance > 100)
+        {
+            <div>
+                Твоето място: <strong>@(Model.UserPlacePoints)</strong>
+            </div>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.UsersStatsMostPointOfWord != null && Model.UsersStatsMostPointOfWord.Count > 0)
+        {
+            rank = 1;
+            odd = true;
+
+            <h5><strong>Най-добра комбинация от думи</strong></h5>
+            <section>
+                <table class="table table-striped table-hover">
+                    <tr class="warning">
+                        <th>Място</th>
+                        <th>Име</th>
+                        <th>точки комбо</th>
+                    </tr>
+
+                    @foreach (var user in Model.UsersStatsMostPointOfWord)
+                    {
+                        <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
+                            <td>
+                                @rank
+                            </td>
+                            <td>
+                                @user.UserName
+                            </td>
+                            <td>
+                                @user.Statistics.MostPointsOfWord
+                            </td>
+                        </tr>
+                        odd = !odd;
+                        rank++;
+                    }
+                </table>
+            </section>
+        }
+        @if (Model.UserPlaceMostPointOfWord > 100)
+        {
+            <div>Твоето място: <strong>@Model.UserPlaceMostPointOfWord</strong></div>
+        }
+    </div>
+    <div class="col-md-6">
+        @if (Model.UsersStatsSpendMoney != null && Model.UsersStatsSpendMoney.Count > 0)
+        {
+            rank = 1;
+            odd = true;
+
+            <h5><strong>Похарчени голдъни</strong></h5>
+            <section>
+                <table class="table table-striped table-hover ">
+                    <tr class="warning">
+                        <th>Място</th>
+                        <th>Име</th>
+                        <th>голдъни</th>
+                    </tr>
+
+                    @foreach (var user in Model.UsersStatsSpendMoney)
+                    {
+                        <tr class="@(User.Identity.IsAuthenticated && user.Id == Model.LoggedUser.Id ? "danger" : odd ? "info" : "success")">
+                            <td>
+                                @rank
+                            </td>
+                            <td>
+                                @user.UserName
+                            </td>
+                            <td>
+                                @user.Statistics.SpentMoney
+                            </td>
+                        </tr>
+                        odd = !odd;
+                        rank++;
+                    }
+                </table>
+            </section>
+        }
+        @if (Model.UserPlaceSpendMoney > 100)
+        {
+            <div>Твоето място: <strong>@(Model.UserPlaceSpendMoney)</strong></div>
         }
     </div>
 </div>
