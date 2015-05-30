@@ -19,11 +19,11 @@
 
         protected override void Seed(WorldOfWordsDbContext context)
         {
-            // This Statement prevent to Seed server multiple times. DO NOT remove
-            if (context.Users.Any())
-            {
-                return;
-            }
+            //// This Statement prevent to Seed server multiple times. DO NOT remove
+            //if (context.Users.Any())
+            //{
+            //    return;
+            //}
             AddLanguagesToDb(context);
             AddRolesToDb(context);
             AddWordsToDbAndStore(context);
