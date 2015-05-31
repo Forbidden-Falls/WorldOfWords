@@ -211,6 +211,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewsModels\CartItem.cs" />
     <Compile Include="ViewsModels\ShowBoardModel.cs" />
+    <Compile Include="ViewsModels\UserStatisticsViewModel.cs" />
     <Compile Include="ViewsModels\WordWithCount.cs" />
   </ItemGroup>
   <ItemGroup>

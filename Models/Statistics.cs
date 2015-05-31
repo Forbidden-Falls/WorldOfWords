@@ -12,9 +12,7 @@
 
         public long  SpentMoney { get; set; }
 
-        public int MostPointsOfWord { get ; set; }
-
-        public string UserId { get; set; }
+        public int? MostPointsOfWord { get ; set; }
 
         public virtual User User { get; set; }
     }

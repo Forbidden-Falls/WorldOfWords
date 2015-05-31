@@ -28,19 +28,19 @@
     {
         public int UserPlaceBalance { get; set; }
 
-        public List<User> UsersStatsBalance { get; set; }
+        public List<UserStatisticsViewModel> UsersStatsBalance { get; set; }
 
         public int UserPlacePoints { get; set; }
 
-        public List<User> UsersStatsPoints { get; set; }
+        public List<UserStatisticsViewModel> UsersStatsPoints { get; set; }
 
         public int UserPlaceSpendMoney { get; set; }
 
-        public List<User> UsersStatsSpendMoney { get; set; }
+        public List<UserStatisticsViewModel> UsersStatsSpendMoney { get; set; }
 
         public int UserPlaceMostPointOfWord { get; set; }
 
-        public List<User> UsersStatsMostPointOfWord { get; set; }
+        public List<UserStatisticsViewModel> UsersStatsMostPointOfWord { get; set; }
 
         public User LoggedUser { get; set; }
     }
