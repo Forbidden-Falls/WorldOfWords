@@ -77,85 +77,87 @@
 
         public ActionResult Rating()
         {
-            var LoggedUser = new User();
-            if (User.Identity.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-                LoggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
-            }
+            //var loggedUser = new User();
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var userId = User.Identity.GetUserId();
+            //    loggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
+            //}
 
-            var queryOrderedByBalance = this.Data.Users
-                .OrderByDescending(u => u.Balance)
-                .ToList();
+            //var queryOrderedByBalance = this.Data.Users
+            //    .OrderByDescending(u => u.Balance)
+            //    .ToList();
 
-            if (queryOrderedByBalance.Count < 0)
-            {
-                return View();
-            }
-            var usersStatsBalanceOrdered = queryOrderedByBalance
-                .Take(100)
-                .Select(u =>
-                    new UserStatisticsViewModel
-                    {
-                        Id = u.Id,
-                        UserName = u.UserName,
-                        Balance = u.Balance,
-                        MostPointsOfWord = u.Statistics.MostPointsOfWord,
-                        SpentMoney = u.Statistics.SpentMoney,
-                        EarnedPoints = u.EarnedPoints,
-                        Email = u.Email
-                    })
-                .ToList();
+            //if (queryOrderedByBalance.Count < 0)
+            //{
+            //    return View();
+            //}
+            //var usersStatsBalanceOrdered = queryOrderedByBalance
+            //    .Take(100)
+            //    .Select(u =>
+            //        new UserStatisticsViewModel
+            //        {
+            //            Id = u.Id,
+            //            UserName = u.UserName,
+            //            Balance = u.Balance,
+            //            MostPointsOfWord = u.Statistics.MostPointsOfWord,
+            //            SpentMoney = u.Statistics.SpentMoney,
+            //            EarnedPoints = u.EarnedPoints,
+            //            Email = u.Email
+            //        })
+            //    .ToList();
 
-            var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
-                .ToList();
+            //var usersStatsPointsOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.EarnedPoints)
+            //    .ToList();
 
-            var usersStatsSpendMoneyOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
-                .ToList();
+            //var usersStatsSpendMoneyOrdered = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
+            //    .ToList();
 
-            var usersStatsMostPointsOfWord = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
-               .ToList();
+            //var usersStatsMostPointsOfWord = usersStatsBalanceOrdered.OrderByDescending(x => x.SpentMoney)
+            //   .ToList();
 
-            var raitingViewModel = new RaitingViewModel
-                {
-                    LoggedUser = LoggedUser,
-                    UsersStatsBalance = usersStatsBalanceOrdered,
-                    UsersStatsPoints = usersStatsPointsOrdered,
-                    UsersStatsSpendMoney = usersStatsSpendMoneyOrdered,
-                    UsersStatsMostPointOfWord = usersStatsMostPointsOfWord,
+            //var raitingViewModel = new RaitingViewModel
+            //    {
+            //        LoggedUser = loggedUser,
+            //        UsersStatsBalance = usersStatsBalanceOrdered,
+            //        UsersStatsPoints = usersStatsPointsOrdered,
+            //        UsersStatsSpendMoney = usersStatsSpendMoneyOrdered,
+            //        UsersStatsMostPointOfWord = usersStatsMostPointsOfWord,
 
-                };
+            //    };
 
-            // If have logged user(Aways TRUE for now), fill this prop with user place in the Rang Lists.
-            // Work With Query list downloaded once from context.
-            if (LoggedUser.Id != null)
-            {
-                raitingViewModel.UserPlaceBalance = queryOrderedByBalance
-                    .OrderByDescending(u => u.Balance)
-                    .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
-                raitingViewModel.UserPlaceBalance++;
+            //// If have logged user(Aways TRUE for now), fill this prop with user place in the Rang Lists.
+            //// Work With Query list downloaded once from context.
+            //if (loggedUser.Id != null)
+            //{
+            //    raitingViewModel.UserPlaceBalance = queryOrderedByBalance
+            //        .OrderByDescending(u => u.Balance)
+            //        .ToList()
+            //        .FindIndex(u => u.Id == loggedUser.Id);
+            //    raitingViewModel.UserPlaceBalance++;
 
-                raitingViewModel.UserPlacePoints = queryOrderedByBalance
-                    .OrderByDescending(u => u.EarnedPoints)
-                    .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
-                raitingViewModel.UserPlacePoints++;
+            //    raitingViewModel.UserPlacePoints = queryOrderedByBalance
+            //        .OrderByDescending(u => u.EarnedPoints)
+            //        .ToList()
+            //        .FindIndex(u => u.Id == loggedUser.Id);
+            //    raitingViewModel.UserPlacePoints++;
 
-                raitingViewModel.UserPlaceSpendMoney = queryOrderedByBalance
-                    .OrderByDescending(u => u.Statistics.SpentMoney)
-                    .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
-                raitingViewModel.UserPlaceSpendMoney++;
+            //    raitingViewModel.UserPlaceSpendMoney = queryOrderedByBalance
+            //        .OrderByDescending(u => u.Statistics.SpentMoney)
+            //        .ToList()
+            //        .FindIndex(u => u.Id == loggedUser.Id);
+            //    raitingViewModel.UserPlaceSpendMoney++;
 
-                raitingViewModel.UserPlaceMostPointOfWord = queryOrderedByBalance
-                    .OrderByDescending(u => u.Statistics.MostPointsOfWord)
-                    .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
-                raitingViewModel.UserPlaceMostPointOfWord++;
-            }
+            //    raitingViewModel.UserPlaceMostPointOfWord = queryOrderedByBalance
+            //        .OrderByDescending(u => u.Statistics.MostPointsOfWord)
+            //        .ToList()
+            //        .FindIndex(u => u.Id == loggedUser.Id);
+            //    raitingViewModel.UserPlaceMostPointOfWord++;
+            //}
 
-            return View(raitingViewModel);
+            //return View(raitingViewModel);
+
+            return View();
         }
 
         public ActionResult Rules()
