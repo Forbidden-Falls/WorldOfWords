@@ -22,7 +22,6 @@
         {
             var context = new WorldOfWordsDbContext();
             this.Data = new WorldOfWordsData(context);
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<WorldOfWordsDbContext, Configuration>());
             
             this.WordAssessor = new Assessor(Config.Language, this.Data);
             this.BoardsManager = new BoardsManager(this.Data);
