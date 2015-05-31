@@ -1,5 +1,7 @@
 ﻿namespace Models
 {
+    using System.ComponentModel;
+
     public class Statistics
     {
         public Statistics()
@@ -10,9 +12,11 @@
 
         public string Id { get; set; }
 
-        public long  SpentMoney { get; set; }
+        [DefaultValue(0)]
+        public long SpentMoney { get; set; }
 
-        public int? MostPointsOfWord { get ; set; }
+        [DefaultValue(0)]
+        public int MostPointsOfWord { get; set; }
 
         public virtual User User { get; set; }
     }
