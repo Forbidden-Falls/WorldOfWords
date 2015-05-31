@@ -121,7 +121,7 @@
                         word.Word.Content));
                 }
             }
-            catch (ApplicationException ex)
+            catch (Exception ex)
             {
                 return new
                 {
