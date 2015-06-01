@@ -19,18 +19,6 @@
 
         protected override void Seed(WorldOfWordsDbContext context)
         {
-            var users = context.Users.ToList();
-            foreach (var user in users)
-            {
-                if (user.Statistics == null || user.Statistics.SpentMoney <= 0)
-                {
-                    user.Statistics = new Statistics()
-                    {
-                        SpentMoney = user.EarnedPoints
-                    };
-                }
-            }
-
             AddLanguagesToDb(context);
             AddRolesToDb(context);
             AddWordsToDbAndStore(context);
