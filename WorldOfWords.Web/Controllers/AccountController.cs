@@ -156,10 +156,15 @@ namespace WorldOfWords.Web.Controllers
             {
                 var user = new User { UserName = model.Email, Email = model.Email }; 
                 user.UserName = model.Username;
+                user.Statistics = new Statistics
+                {
+                    MostPointsOfWord = 0
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var addtoroleResult = await this.UserManager.AddToRoleAsync(user.Id, "user");
+                    await this.UserManager.AddToRoleAsync(user.Id, "user");
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     return RedirectToAction("Index", "Home");

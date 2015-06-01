@@ -19,11 +19,17 @@
 
         protected override void Seed(WorldOfWordsDbContext context)
         {
-            //// This Statement prevent to Seed server multiple times. DO NOT remove
-            //if (context.Users.Any())
-            //{
-            //    return;
-            //}
+            foreach (var user in context.Users)
+            {
+                if (user.Statistics == null || user.Statistics.SpentMoney <= 0)
+                {
+                    user.Statistics = new Statistics()
+                    {
+                        SpentMoney = user.EarnedPoints
+                    };
+                }
+            }
+
             AddLanguagesToDb(context);
             AddRolesToDb(context);
             AddWordsToDbAndStore(context);
@@ -109,6 +115,11 @@
 
         private void AddRolesToDb(WorldOfWordsDbContext context)
         {
+            if (context.Users.Any())
+            {
+                return;
+            }
+
             var storeRole = new RoleStore<IdentityRole>(context);
             var managerRole = new RoleManager<IdentityRole>(storeRole);
             var adminRole = new IdentityRole { Name = "admin" };
