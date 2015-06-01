@@ -7,6 +7,7 @@
     using Microsoft.AspNet.Identity;
     using Models;
     using ViewsModels;
+    using WebGrease;
 
     public class HomeController : BaseController
     {
@@ -77,11 +78,11 @@
 
         public ActionResult Rating()
         {
-            var LoggedUser = new User();
+            var loggedUser = new User();
             if (User.Identity.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
-                LoggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
+                loggedUser = this.Data.Users.FirstOrDefault(u => u.Id == userId);
             }
 
             var queryOrderedByBalance = this.Data.Users
@@ -93,15 +94,16 @@
                 return View();
             }
             var usersStatsBalanceOrdered = queryOrderedByBalance
+                .Where(u => u.Statistics != null)
                 .Take(100)
                 .Select(u =>
-                    new User
+                    new UserStatisticsViewModel
                     {
                         Id = u.Id,
                         UserName = u.UserName,
                         Balance = u.Balance,
-                        MostPointsOfWord = u.MostPointsOfWord,
-                        SpentMoney = u.SpentMoney,
+                        MostPointsOfWord = u.Statistics == null ? 0 : u.Statistics.MostPointsOfWord,
+                        SpentMoney = u.Statistics == null ? 0 : u.Statistics.SpentMoney,
                         EarnedPoints = u.EarnedPoints,
                         Email = u.Email
                     })
@@ -118,7 +120,7 @@
 
             var raitingViewModel = new RaitingViewModel
                 {
-                    LoggedUser = LoggedUser,
+                    LoggedUser = loggedUser,
                     UsersStatsBalance = usersStatsBalanceOrdered,
                     UsersStatsPoints = usersStatsPointsOrdered,
                     UsersStatsSpendMoney = usersStatsSpendMoneyOrdered,
@@ -128,34 +130,38 @@
 
             // If have logged user(Aways TRUE for now), fill this prop with user place in the Rang Lists.
             // Work With Query list downloaded once from context.
-            if (LoggedUser.Id != null)
+            if (loggedUser.Id != null)
             {
                 raitingViewModel.UserPlaceBalance = queryOrderedByBalance
                     .OrderByDescending(u => u.Balance)
                     .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
+                    .FindIndex(u => u.Id == loggedUser.Id);
                 raitingViewModel.UserPlaceBalance++;
 
                 raitingViewModel.UserPlacePoints = queryOrderedByBalance
                     .OrderByDescending(u => u.EarnedPoints)
                     .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
+                    .FindIndex(u => u.Id == loggedUser.Id);
                 raitingViewModel.UserPlacePoints++;
 
                 raitingViewModel.UserPlaceSpendMoney = queryOrderedByBalance
-                    .OrderByDescending(u => u.SpentMoney)
+                    .Where(u => u.Statistics != null)
+                    .OrderByDescending(u => u.Statistics.SpentMoney)
                     .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
+                    .FindIndex(u => u.Id == loggedUser.Id);
                 raitingViewModel.UserPlaceSpendMoney++;
 
                 raitingViewModel.UserPlaceMostPointOfWord = queryOrderedByBalance
-                    .OrderByDescending(u => u.MostPointsOfWord)
+                    .Where(u => u.Statistics != null)
+                    .OrderByDescending(u => u.Statistics.MostPointsOfWord)
                     .ToList()
-                    .FindIndex(u => u.Id == LoggedUser.Id);
+                    .FindIndex(u => u.Id == loggedUser.Id);
                 raitingViewModel.UserPlaceMostPointOfWord++;
             }
 
             return View(raitingViewModel);
+
+            return View();
         }
 
         public ActionResult Rules()

@@ -106,9 +106,17 @@
                     boardsUsers.UserPoints += pointsOfWord;
                     var user = this.Data.Users.First(u => u.Id == userId);
 
-                    if (user.MostPointsOfWord == null || user.MostPointsOfWord < pointsOfWord)
+                    if (user.Statistics == null )
                     {
-                        user.MostPointsOfWord = pointsOfWord;
+                        user.Statistics = new Statistics
+                        {
+                            MostPointsOfWord = 0
+                        };
+                    }
+
+                    if (user.Statistics.MostPointsOfWord < pointsOfWord)
+                    {
+                        user.Statistics.MostPointsOfWord = pointsOfWord;
                     }
 
                     this.Data.SaveChanges();
@@ -121,7 +129,7 @@
                         word.Word.Content));
                 }
             }
-            catch (ApplicationException ex)
+            catch (Exception ex)
             {
                 return new
                 {

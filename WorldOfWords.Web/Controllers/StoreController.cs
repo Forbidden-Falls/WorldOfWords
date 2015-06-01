@@ -211,21 +211,16 @@ namespace WorldOfWords.Web.Controllers
                     });
                 }
 
-
                 storeWord.Quantity -= shopItem.Quantity;
-                var spentMoney = this.WordAssessor.GetPointsByWord(storeWord.Word.Content) * shopItem.Quantity;
-                user.Balance -= spentMoney;
-                if (user.SpentMoney <= 0)
-                {
-                    user.SpentMoney = user.EarnedPoints;
-                }
-
-                user.SpentMoney += spentMoney;
 
                 if (storeWord.Quantity == 0)
                 {
                     this.Data.StoreWords.Delete(storeWord);
                 }
+
+                var spentMoney = this.WordAssessor.GetPointsByWord(storeWord.Word.Content) * shopItem.Quantity;
+                user.Balance -= spentMoney;
+                user.Statistics.SpentMoney += spentMoney;
             }
         }
 
