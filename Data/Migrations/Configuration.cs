@@ -19,7 +19,8 @@
 
         protected override void Seed(WorldOfWordsDbContext context)
         {
-            foreach (var user in context.Users)
+            var users = context.Users.ToList();
+            foreach (var user in users)
             {
                 if (user.Statistics == null || user.Statistics.SpentMoney <= 0)
                 {
