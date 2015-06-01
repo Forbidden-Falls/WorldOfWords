@@ -199,7 +199,7 @@ namespace WorldOfWords.Web.Controllers
                 userDb.Balance -= spentMoney;
 
 
-                if (userDb.Statistics == null)
+                if (userDb.Statistics == null || userDb.Statistics.SpentMoney <= 0)
                 {
                     userDb.Statistics = new Statistics
                     {
