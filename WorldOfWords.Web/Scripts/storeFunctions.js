@@ -4,7 +4,9 @@
     });;
 }
 
-function addShopItemToList(shopItem, shopList) {
+function addShopItemToList(shopItem) {
+    var shopList = JSON.parse(getShopList());
+
     var indexOfItemInArray = -1;
     for (var i = 0; i < shopList.length; i++) {
         var item = shopList[i];
@@ -21,20 +23,18 @@ function addShopItemToList(shopItem, shopList) {
     shopList.push(shopItem);
 
     updateCart(shopList);
+    loadShopCartIntoView();
 }
 
-function deleteAllFromCart(shopList) {
-    shopList = [];
-
-    updateCart(shopList).success(loadShopCartIntoView);
-    location.reload();
+function deleteAllFromCart() {
+    updateCart(Array());
+    loadShopCartIntoView();
+    loadShopIntoView();
 }
 
-function deleteFromCart(wordId, shopList) {
-    deleteShopItemFromList(wordId, shopList).success(loadShopCartIntoView);
-}
+function deleteFromCart(wordId) {
+    var shopList = JSON.parse(getShopList());
 
-function deleteShopItemFromList(wordId, shopList) {
     for (var i = 0; i < shopList.length; i++) {
         var item = shopList[i];
 
@@ -43,20 +43,17 @@ function deleteShopItemFromList(wordId, shopList) {
         }
     }
 
-    return updateCart(shopList);
+    updateCart(shopList);
+    loadShopCartIntoView();
 }
 
-function loadShopCartIntoView(shopList) {
-    if (shopList === undefined || shopList === null) {
-        $("#shop-cart").html("");
-        return;
-    }
-    if (shopList.shopList === null) {
-        $("#shop-cart").html("");
-        return;
-    }
+function loadShopCartIntoView() {
+    var shopList = getShopList();
 
-    shopList = JSON.stringify(shopList);
+    if (!shopList || shopList === "[]") {
+        $("#shop-cart").html("");
+        return;
+    }
 
     $.ajax({
         cache: false,
@@ -69,8 +66,8 @@ function loadShopCartIntoView(shopList) {
     }).error(ajaxError);
 }
 
-function buyWords(shopList) {
-    shopList = JSON.stringify(shopList);
+function buyWords() {
+    var shopList = getShopList();
 
     $.ajax({
         cache: false,
@@ -79,18 +76,6 @@ function buyWords(shopList) {
         contentType: "application/json",
         data: shopList
     }).success(buyWordsSuccess).error(ajaxError);
-}
-
-function updateCart(shopList) {
-    shopList = JSON.stringify(shopList);
-
-    return $.ajax({
-        cache: false,
-        url: "Store/UpdateCart",
-        type: "POST",
-        contentType: "application/json",
-        data: shopList
-    });
 }
 
 function buyWordsSuccess(data) {
@@ -113,7 +98,9 @@ function buyWordsSuccess(data) {
                 align: "center"
             }
         });
-    shopl
+
+    updateCart(Array());
+
     loadShopIntoView();
     loadShopCartIntoView();
 }
@@ -130,4 +117,13 @@ function ajaxError(error) {
         });
     loadShopIntoView();
     loadShopCartIntoView();
+}
+
+function updateCart(shopList) {
+    shopList = JSON.stringify(shopList);
+    localStorage.setItem("shopList", shopList);
+}
+
+function getShopList() {
+    return localStorage.getItem("shopList") || "[]";
 }

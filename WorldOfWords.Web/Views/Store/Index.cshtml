@@ -26,20 +26,9 @@
 <script>
     loadShopIntoView();
 
-    $("#search-box").keyup(function (data) {
+    $("#search-box").keyup(function () {
         $("#search-form").submit();
     });
 
-    var jsonShopList;
-    var shopList = [];
-
-    @if (@Session["shopList"] != null)
-    {
-        @:jsonShopList = '@Html.Raw(@Session["shopList"])';
-    }
-    
-    if (jsonShopList != null && jsonShopList != "null") {
-        shopList = JSON.parse(jsonShopList);
-        loadShopCartIntoView(shopList);
-    }
+    loadShopCartIntoView();
 </script>

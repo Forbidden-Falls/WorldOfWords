@@ -8,8 +8,8 @@
     </tr>
     <tr>
         <td colspan="4" style="text-align: right">
-            <input type="button" name="buy" value="Buy" class="btn btn-lg btn-success" onclick=" buyWords(shopList) "/>
-            <input type="button" name="delete-all" value="Delete All" class="btn btn-lg btn-danger" onclick="deleteAllFromCart(shopList)" />
+            <input type="button" name="buy" value="Buy" class="btn btn-lg btn-success" onclick=" buyWords()"/>
+            <input type="button" name="delete-all" value="Delete All" class="btn btn-lg btn-danger" onclick="deleteAllFromCart()" />
         </td>
     </tr>
 
@@ -32,7 +32,7 @@
             <td>
                 @word.Price * @word.Quantity = @(word.Price*word.Quantity)
             </td>
-            <td><input type="button" name="delete" value="Delete" class="btn btn-danger" onclick="deleteFromCart(@word.WordId, shopList)"/></td>
+            <td><input type="button" name="delete" value="Delete" class="btn btn-danger" onclick="deleteFromCart(@word.WordId)"/></td>
         </tr>
     }
     </tbody>

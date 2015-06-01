@@ -85,12 +85,12 @@
                 Word: word
             }
             if (shopItem.Quantity === 0) {
-                deleteShopItemFromList(shopItem.WordId, shopList);
+                deleteFromCart(shopItem.WordId);
             } else {
-                addShopItemToList(shopItem, shopList);
+                addShopItemToList(shopItem);
             }
 
-            loadShopCartIntoView(shopList);
+            loadShopCartIntoView();
 
         });
 

@@ -129,12 +129,6 @@ namespace WorldOfWords.Web.Controllers
             return PartialView(cartItems);
         }
 
-        public ActionResult UpdateCart(List<ShopItem> shopList)
-        {
-            this.Session["shopList"] = JsonConvert.SerializeObject(shopList);
-
-            return Json(new { shopList }, JsonRequestBehavior.AllowGet);
-        }
         public ActionResult Buy(List<ShopItem> shopList)
         {
             var errors = new List<string>();
