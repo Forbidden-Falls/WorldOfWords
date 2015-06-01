@@ -140,75 +140,27 @@ namespace WorldOfWords.Web.Controllers
             var errors = new List<string>();
             var currentUserId = this.User.Identity.GetUserId();
             var userDb = this.Data.Users.FirstOrDefault(u => u.Id == currentUserId);
+
             var shopListWordIds = shopList.Select(sl => sl.WordId);
-            var storeWords = this.Data.StoreWords.Where(sw => shopListWordIds.Contains(sw.Id)).Include(sw => sw.Word).ToList();
+            var storeWords = this.Data.StoreWords
+                .Where(sw => shopListWordIds.Contains(sw.Id))
+                .Include(sw => sw.Word)
+                .ToList();
 
-            var totalPriceForWords = 0;
-            foreach (var storeWord in storeWords)
-            {
-                var price = this.WordAssessor.GetPointsByWord(storeWord.Word.Content);
-                var quantity = shopList.FirstOrDefault(sl => sl.WordId == storeWord.Id).Quantity;
-
-                totalPriceForWords += price*quantity;
-            }
-
+            var totalPriceForWords = TotalPriceForWords(shopList, storeWords);
             if (totalPriceForWords > userDb.Balance)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Not enough balance");
             }
 
-            var missingWordsInStore = shopListWordIds.Except(storeWords.Select(sw => sw.Id));
-            if (missingWordsInStore.Any())
+            FilterMissingWordsInShopList(ref shopList, shopListWordIds, storeWords, errors);
+            if (shopList.Count == 0)
             {
-                var missingWords = shopList.Where(sl => missingWordsInStore.Contains(sl.WordId));
-
-                shopList = shopList.Except(missingWords).ToList();
-                errors.Add("Some words were not available: " + string.Join(", ", missingWords.Select(sl => sl.Word)));
-
-                if (shopList.Count == 0)
-                {
-                    return Json(new { errors, balance = userDb.Balance }, JsonRequestBehavior.AllowGet);
-                }
+                this.Session["shopList"] = null;
+                return Json(new { errors, balance = userDb.Balance }, JsonRequestBehavior.AllowGet);
             }
 
-            foreach (var storeWord in storeWords)
-            {
-                var shopItem = shopList.FirstOrDefault(si => si.WordId == storeWord.Id);
-                if (storeWord.Quantity < shopItem.Quantity)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "There isn't enough quantity for word: " + storeWord.Word.Content);
-                }
-
-                var userWord = userDb.WordsUsers.FirstOrDefault(w => w.WordId == storeWord.WordId);
-                if (userWord != null)
-                {
-                    userWord.WordCount += shopItem.Quantity;
-                }
-                else
-                {
-                    userDb.WordsUsers.Add(new WordsUsers()
-                    {
-                        WordId = storeWord.WordId,
-                        WordCount = shopItem.Quantity
-                    });
-                }
-
-                
-                storeWord.Quantity -= shopItem.Quantity;
-                var spentMoney =  this.WordAssessor.GetPointsByWord(storeWord.Word.Content) * shopItem.Quantity;
-                userDb.Balance -= spentMoney;
-                if (userDb.SpentMoney <= 0)
-                {
-                    userDb.SpentMoney = userDb.EarnedPoints;
-                }
-
-                userDb.SpentMoney += spentMoney;
-
-                if (storeWord.Quantity == 0)
-                {
-                    this.Data.StoreWords.Delete(storeWord);
-                }
-            }
+            BuyWords(shopList, storeWords, errors, userDb);
 
             this.Data.SaveChanges();
 
@@ -216,6 +168,80 @@ namespace WorldOfWords.Web.Controllers
 
             this.Session["shopList"] = null;
             return Json(new { errors, balance = userDb.Balance }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void FilterMissingWordsInShopList(ref List<ShopItem> shopList,
+            IEnumerable<int> shopListWordIds,
+            List<StoreWord> storeWords,
+            List<string> errors)
+        {
+            var missingWordsInStore = shopListWordIds.Except(storeWords.Select(sw => sw.Id));
+            if (missingWordsInStore.Any())
+            {
+                var missingWords = shopList.Where(sl => missingWordsInStore.Contains(sl.WordId));
+
+                shopList = shopList.Except(missingWords).ToList();
+                errors.Add("Some words were not available: " + string.Join(", ", missingWords.Select(sl => sl.Word)));
+            }
+        }
+
+        private void BuyWords(List<ShopItem> shopList, List<StoreWord> storeWords, List<string> errors, User user)
+        {
+            foreach (var storeWord in storeWords)
+            {
+                var shopItem = shopList.First(si => si.WordId == storeWord.Id);
+                if (storeWord.Quantity < shopItem.Quantity)
+                {
+                    shopItem.Quantity = storeWord.Quantity;
+                    errors.Add(String.Format("There isn't enough quantity for word {0}. {1} bought instead",
+                        storeWord.Word.Content, shopItem.Quantity));
+                }
+
+                var userWord = user.WordsUsers.FirstOrDefault(w => w.WordId == storeWord.WordId);
+                if (userWord != null)
+                {
+                    userWord.WordCount += shopItem.Quantity;
+                }
+                else
+                {
+                    user.WordsUsers.Add(new WordsUsers()
+                    {
+                        WordId = storeWord.WordId,
+                        WordCount = shopItem.Quantity
+                    });
+                }
+
+
+                storeWord.Quantity -= shopItem.Quantity;
+                var spentMoney = this.WordAssessor.GetPointsByWord(storeWord.Word.Content) * shopItem.Quantity;
+                user.Balance -= spentMoney;
+                if (user.SpentMoney <= 0)
+                {
+                    user.SpentMoney = user.EarnedPoints;
+                }
+
+                user.SpentMoney += spentMoney;
+
+                if (storeWord.Quantity == 0)
+                {
+                    this.Data.StoreWords.Delete(storeWord);
+                }
+            }
+        }
+
+        private int TotalPriceForWords(List<ShopItem> shopList, List<StoreWord> storeWords)
+        {
+            int totalPriceForWords = 0;
+
+            foreach (var storeWord in storeWords)
+            {
+                var price = this.WordAssessor.GetPointsByWord(storeWord.Word.Content);
+                var quantity = shopList.First(sl => sl.WordId == storeWord.Id).Quantity;
+
+                totalPriceForWords += price * quantity;
+            }
+
+            return totalPriceForWords;
         }
     }
 }
