@@ -24,9 +24,7 @@
     </div>
 </div>
 <script>
-    loadShop().success(function(data) {
-        $("#words-section").html(data);
-    });
+    loadShopIntoView();
 
     $("#search-box").keyup(function (data) {
         $("#search-form").submit();
