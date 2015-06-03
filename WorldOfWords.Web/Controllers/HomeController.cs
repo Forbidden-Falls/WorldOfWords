@@ -131,7 +131,7 @@
 
             // If have logged user(Aways TRUE for now), fill this prop with user place in the Rang Lists.
             // Work With Query list downloaded once from context.
-            if (loggedUser.Id != null)
+            if (loggedUser.Id != null) 
             {
                 raitingViewModel.UserPlaceBalance = queryOrderedByBalance
                     .OrderByDescending(u => u.Balance)
@@ -166,6 +166,7 @@
         public ActionResult Rules()
         {
             return View();
+
         }
     }
 }
