@@ -96,7 +96,7 @@
             }
             var usersStatsBalanceOrdered = queryOrderedByBalance
                 .Where(u => u.Statistics != null && u.Balance > 0)
-                .Take(100)
+                .Take(25)
                 .Select(u =>
                     new UserStatisticsViewModel
                     {
