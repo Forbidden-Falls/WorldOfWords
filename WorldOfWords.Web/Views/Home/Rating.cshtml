@@ -41,7 +41,7 @@
                 </table>
             </section>
         }
-        @if (Model.UserPlaceBalance > 25)
+        @if (Model.UserPlaceBalance > ViewBag.ratingRows)
         {
             <div>
                 Твоето място: <strong>@Model.UserPlaceBalance</strong>
@@ -81,7 +81,7 @@
                 </table>
             </section>
         }
-        @if (Model.UserPlaceBalance > 25)
+        @if (Model.UserPlaceBalance > ViewBag.ratingRows)
         {
             <div>
                 Твоето място: <strong>@(Model.UserPlacePoints)</strong>
@@ -124,7 +124,7 @@
                 </table>
             </section>
         }
-        @if (Model.UserPlaceMostPointOfWord > 25)
+        @if (Model.UserPlaceMostPointOfWord > ViewBag.ratingRows)
         {
             <div>Твоето място: <strong>@Model.UserPlaceMostPointOfWord</strong></div>
         }
@@ -163,7 +163,7 @@
                 </table>
             </section>
         }
-        @if (Model.UserPlaceSpendMoney > 25)
+        @if (Model.UserPlaceSpendMoney > ViewBag.ratingRows)
         {
             <div>Твоето място: <strong>@(Model.UserPlaceSpendMoney)</strong></div>
         }

@@ -11,6 +11,8 @@
 
     public class HomeController : BaseController
     {
+        private const int RatingRows = 25;
+
         public ActionResult Index()
         {
             this.BoardsManager.Execute();
@@ -79,6 +81,8 @@
 
         public ActionResult Rating()
         {
+            this.ViewBag.ratingRows = RatingRows;
+
             var loggedUser = new User();
             if (User.Identity.IsAuthenticated)
             {
@@ -96,7 +100,6 @@
 
             var usersStatsViewModel = users
                 .Where(u => u.Statistics != null)
-                //.Take(25)
                 .Select(u =>
                     new UserStatisticsViewModel
                     {
@@ -111,22 +114,25 @@
 
             var usersStatsBalanceOrdered = usersStatsViewModel
                 .OrderByDescending(u => u.Balance)
-                .Take(25)
+                .Take(RatingRows)
                 .ToList();
 
             var usersStatsPointsOrdered = usersStatsViewModel
+                .Where(u => u.EarnedPoints > 0)
                 .OrderByDescending(x => x.EarnedPoints)
-                .Take(25)
+                .Take(RatingRows)
                 .ToList();
 
             var usersStatsSpendMoneyOrdered = usersStatsViewModel
+                .Where(u => u.SpentMoney > 0)
                 .OrderByDescending(x => x.SpentMoney)
-                .Take(25)
+                .Take(RatingRows)
                 .ToList();
 
             var usersStatsMostPointsOfWord = usersStatsViewModel
+                .Where(u => u.MostPointsOfWord > 0)
                 .OrderByDescending(x => x.MostPointsOfWord)
-                .Take(25)
+                .Take(RatingRows)
                .ToList();
 
             var raitingViewModel = new RaitingViewModel
