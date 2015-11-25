@@ -184,11 +184,17 @@ namespace WorldOfWords.Web.Controllers
             foreach (var storeWord in storeWords)
             {
                 var shopItem = shopList.First(si => si.WordId == storeWord.Id);
+                if (storeWord.Quantity <= 0)
+                {
+                    errors.Add($"Invalid quantity for word \"{storeWord.Word.Content}\"");
+                    continue;
+                }
+
                 if (storeWord.Quantity < shopItem.Quantity)
                 {
                     shopItem.Quantity = storeWord.Quantity;
-                    errors.Add(String.Format("There isn't enough quantity for word {0}. {1} bought instead",
-                        storeWord.Word.Content, shopItem.Quantity));
+                    errors.Add(
+                        $"There isn't enough quantity for word {storeWord.Word.Content}. {shopItem.Quantity} bought instead");
                 }
 
                 var userWord = user.WordsUsers.FirstOrDefault(w => w.WordId == storeWord.WordId);
