@@ -4,6 +4,7 @@
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
 
+    [DbConfigurationType(typeof(WorldOfWordsDbConfiguration))]
     public class WorldOfWordsDbContext : IdentityDbContext<User>
     {
         public WorldOfWordsDbContext()
